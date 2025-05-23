@@ -1,0 +1,42 @@
+﻿@model ProductListViewModel
+@{
+    ViewData["Title"] = "addCoupon";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Add Coupon</h1>
+<div  style="width:90%;">
+<form method="post" asp-controller="Coupon" asp-action="addCoupon">
+    <div class="form-group">
+        <label for="code">Coupon Code</label>
+        <input type="text" class="form-control" id="code" name="Code" placeholder="Enter Coupon Code" required>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="discount">Discount</label>
+        <input type="number" class="form-control" id="discount" name="Discount" placeholder="Enter Discount Percentage" required>
+    </div>
+        <br />
+    <div class="form-group">
+        <label for="products">Select Products</label>
+            <select multiple class="form-control" id="products" name="ProductIds[]">
+                @foreach (var product in Model.Products)
+                {
+                    <option value="@product.ProductId">@product.Name</option>
+                }
+            </select>
+    </div>
+        <br />
+    <div class="form-group">
+        <label for="users">Select Users</label>
+            <select multiple class="form-control" id="users" name="UserIds[]">
+                @foreach (var user in Model.apUsers)
+                {
+                    <option value="@user.ApplicationUserId">@user.UserName</option>
+                }
+            </select>
+    </div>
+        <br />
+    <button type="submit" class="btn btn-success">Save Coupon</button>
+</form>
+</div>

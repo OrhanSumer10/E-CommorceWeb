@@ -1,0 +1,123 @@
+﻿@model AUListViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+
+<div class="profile-container">
+    <div class="profile-container-left">
+        <div class="box profile-name">
+            @if (@Model.AUser.Name == null && @Model.AUser.LastName == null)
+            {
+                <span>@Model.AUser.UserName </span>
+            }
+            else
+            {
+                <span>@Model.AUser.Name @Model.AUser.LastName </span>
+            }
+
+        </div>
+        <div class="box profile-my_order">
+            <span>Siparişlerim</span>
+            <hr width="100%" color="#e6e6e6" align="center" />
+            <a id="aid" href="" onclick="degiskeniDegistir('Tüm Siparişlerim')" class=""><i class="fa-solid fa-store"></i>Tüm Siparişlerim</a>
+            <a id="aid" href="" onclick="degiskeniDegistir('Değerlendirmelerim')" class=""><i class="fa-solid fa-star-half-stroke"></i>Değerlendirmelerim</a>
+            <a id="aid" href="" onclick="degiskeniDegistir('Tekrar Sipariş Et')" class=""><i class="fa-solid fa-bag-shopping"></i>Tekrar Sipariş Et</a>
+
+        </div>
+        <div class="box profile-my_order">
+            <span>Sana Özel</span>
+            <hr width="100%" color="#e6e6e6" align="center" />
+            <a id="aid" onclick="degiskeniDegistir('İndirim Kuponlarım')" href="" class=""><i class="fa-solid fa-hand-holding-dollar"></i>İndirim Kuponlarım</a>
+            <a id="aid" onclick="degiskeniDegistir('Bildirimlerim')" href="" class=""><i class="fa-solid fa-bullhorn"></i>Bildirimlerim</a>
+            <a id="aid" onclick="degiskeniDegistir('Favori Ürünlerim')" class=""><i class='bx bx-heart'></i>Favori Ürünlerim</a>
+
+        </div>
+        <div class="box profile-my_order">
+            <span>Hesabım & Yardım</span>
+            <hr width="100%" color="#e6e6e6" align="center" />
+            <a id="aid" onclick="degiskeniDegistir('Kullanıcı Bilgilerim')" href="" class="profile-active"><i class="fa-regular fa-user"></i>Kullanıcı Bilgilerim</a>
+            <a id="aid" onclick="degiskeniDegistir('Adres Bilgilerim')" href="" class=""><i class="fa-solid fa-map-location-dot"></i>Adres Bilgilerim</a>
+            <a id="aid" onclick="degiskeniDegistir('Kart Bilgilerim')" href="" class=""><i class="fa-regular fa-credit-card"></i>Kayıtlı Kartlarım</a>
+            <a id="aid" onclick="degiskeniDegistir('HelpCenter')" href="" class=""><i class="fa-regular fa-circle-question"></i>Yardım</a>
+
+        </div>
+    </div>
+    <div class="profile-container-right" style="display:block;">
+        <div class="box  profile-info">
+            <span id="getTopInfo"></span>
+        </div>
+        <div class="profile-container-right-content">
+            <div id="Kullanıcı Bilgilerim" class="get-component" style="display:block;">
+                @await Component.InvokeAsync("ApplicationUser")
+            </div>
+            <div id="Favori Ürünlerim" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("WLItem")
+            </div>
+            <div id="Adres Bilgilerim" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("Address")
+            </div>
+            <div id="Kart Bilgilerim" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("CreditCard")
+            </div>
+            <div id="Tüm Siparişlerim" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("Orders")
+            </div>
+            <div id="Değerlendirmelerim" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("MyReview", new {userId = Model.AUser.ApplicationUserId})
+            </div>
+            <div id="Tekrar Sipariş Et" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("ReOrder")
+            </div>
+            <div id="Bildirimlerim" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("Notification")
+            </div>
+            <div id="İndirim Kuponlarım" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("MyCoupon")
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Bütün divleri gizle (dinamik olarak)
+    const divler = document.querySelectorAll('.get-component'); // Tüm divleri seçiyoruz
+    const getTopInfo = document.getElementById('getTopInfo');
+    let degisken = 'Kullanıcı Bilgilerim';  // Başlangıçta 'UserInfo' değeri
+    getTopInfo.innerHTML = degisken;
+    function degiskeniDegistir(yeniDeger) {
+        console.log('Tıklanan değer: ' + yeniDeger);
+        degisken = yeniDeger;
+        
+       
+        divler.forEach(function (div) {
+            div.style.display = 'none';  // Tüm divleri gizle
+        });
+
+        // Tıklanan değeri (yeniDeger) içeren ID'ye sahip div'i göster
+        const divToShow = document.getElementById(degisken);  // degiskenin değerine göre ID'yi seç
+        if (divToShow) {
+            getTopInfo.innerHTML = degisken;
+            divToShow.style.display = 'block';  // Seçilen div'i göster
+        }
+    }
+    $(document).ready(function () {
+        // Başlangıçta zaten "profile-active" sınıfı olan bir öğe varsa, bunu tespit edip görsel olarak işaretleriz.
+
+        // Tüm <a> etiketlerine click event'i ekleyelim
+        $('a#aid').on('click', function (e) {
+            e.preventDefault();  // Sayfanın yenilenmesini engelliyoruz.
+
+            // Önceki tüm aktif sınıfları kaldır
+            $('a#aid').removeClass('profile-active');
+
+            // Şu an tıklanan <a> etiketi üzerine "profile-active" sınıfı ekle
+            $(this).addClass('profile-active');
+
+        });
+    });
+</script>

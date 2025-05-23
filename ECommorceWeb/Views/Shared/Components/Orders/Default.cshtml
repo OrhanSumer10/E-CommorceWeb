@@ -1,0 +1,86 @@
+﻿@using Entities.Concrete;
+@model ProductListViewModel
+
+
+<div class="allMyOrders" style="width:100%;">
+
+@foreach (var item in Model.orders)
+{
+    // Ödeme yapılan ürünleri al
+        var cartItemsForOrder = Model.cartItems.Where(c => c.ApplicationUserId == item.UserId && c.isPaid && c.CartItemId == item.cartitemId).ToList();
+    // Kullanıcının varsayılan adresi
+    var addressForOrder = Model.addresses.FirstOrDefault(a => a.UserId == item.UserId && a.IsDefaultShipping);
+
+    @foreach (var cart in cartItemsForOrder)
+    {
+            var productImg = Model.productImages
+            .Where(x => x.productId == cart.ProductId)
+            .Select(img => $"data:{img.ContentType};base64,{Convert.ToBase64String(img.ImageData)}")
+            .ToList();
+
+            <div class="amo-top" style=" margin-top:1rem;">
+                <span>
+                    Sipariş Tarihi
+                    <br />
+                    <small>@item.OrderDate</small>
+                </span>
+                <span>
+                    Sipariş Özeti
+                    <br />
+                    <small>@cart.SelectedQuantity adet - Seçenek @cart.SelectedValue </small>
+                </span>
+                <span>
+                    Alıcı
+                    <br />
+                    <small>@cart.ApplicationUser.Name  @cart.ApplicationUser.LastName</small>
+                </span>
+                <span>
+                    Tutar
+                    <br />
+
+                    <small>@cart.SelectedPrice.ToString("F2") ₺</small>
+                </span>
+            </div>
+            <div class="amo-bottom">
+                <div class="amo-bottom-container">
+                    <span>
+                        Durum <br />
+                        @{
+                            var statusClass = item.Status switch
+                            {
+                                Order.OrderStatus.Pending => "text-warning",       // Sarı
+                                Order.OrderStatus.Processing => "text-primary",    // Mavi
+                                Order.OrderStatus.Shipped => "text-info",          // Açık mavi
+                                Order.OrderStatus.Delivered => "text-success",     // Yeşil
+                                Order.OrderStatus.Cancelled => "text-danger",      // Kırmızı
+                                Order.OrderStatus.Returned => "text-secondary",    // Gri
+                                _ => "text-dark"
+                            };
+                        }
+                        <small class="@statusClass">@item.Status</small>
+                    </span>
+                    @if (productImg.Any()) // Fotoğraf varsa
+                    {
+                        <div id="carousel-@cart.ProductId" class="carousel slide" data-bs-ride="carousel" style="width: 50px; margin: auto;">
+                            <div class="carousel-inner">
+                                @for (int i = 0; i < productImg.Count; i++)
+                                {
+                                    var imageUrl = productImg[i];
+                                    <div class="carousel-item @(i == 0 ? "active" : "")" style="text-align: center;">
+                                        <img src="@imageUrl" style="display: block; margin: auto; max-width:50px; max-height: 50px;" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <img src="default_image_url.jpg" style="display: block; margin: auto; max-width:50px; max-height: 50px;" />
+                    }
+                    <span> </span>
+
+                </div>
+            </div>
+    }
+}
+</div>

@@ -1,0 +1,11 @@
+﻿@model ProductListViewModel
+
+
+
+@if (Model.Categories != null)
+{
+    foreach (var cat in Model.Categories)
+    {
+        <li><a href="/Product/Index?categoryId=@cat.CategoryId">@cat.Name</a></li>
+    }
+}

@@ -1,0 +1,62 @@
+﻿
+
+<h2> Login Sayfası</h2>
+x
+<div class="login-container">
+  
+    <div class="panel">
+        <div class="login-panel-image"> 
+            <img src="~/images/shopimg.svg"/>
+            <h2>SNHF STORE</h2>
+            <span>Beautiful eCommerce UI Kit for your online store</span>
+        </div>
+        <div class="login-panel-btn">
+            <button id="sign-up-button">Sign Up</button>
+        <button id="login-button" style="display:none">Login</button>
+        </div>
+    </div> 
+  
+    <div class="login-left">   
+        <form class="sign-in-form" method="post">
+            <h2 class="login-title">Login</h2>
+            <div class="input-field-login">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="Username" />
+            </div> <br />
+            <div class="input-field-login">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" />
+            </div> <br />
+            <input type="submit" value="Login" class="btn-login-forms" id="login-button1"/>
+
+        </form>
+
+
+    </div>
+    <div class="login-right">
+    
+        <form action="~/Login/Register" class="sign-up-form" method="post">
+         
+            <h2 class="login-title">Sign up</h2>
+            <div class="input-field-login">
+                <i class="fas fa-user"></i>
+                <input type="text" name="UserName" placeholder="Username" />
+            </div>
+            <br />
+            <div class="input-field-login">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="Email" placeholder="Email" />
+            </div>
+            <br />
+            <div class="input-field-login">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="PasswordHash" placeholder="Password" />
+            </div>
+            <br />
+            <input type="submit" class="btn-login-forms" value="Sign up" />
+
+        </form>
+    </div>
+</div>
+
+

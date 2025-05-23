@@ -1,0 +1,28 @@
+﻿@model POTViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Product Option</h1> 
+<div class="pot-index">
+
+@foreach (var item in Model.ProductOptions)
+{
+    <div class="checkbox-wrapper-16" style=" margin-right:1rem; ">
+        <label class="checkbox-wrapper" >
+            <input class="checkbox-input"  value="${num}">
+            <span class="checkbox-tile">
+                <span class="checkbox-label" >@item.OptionValue</span>
+            </span>
+        </label>
+        <input class="stock-input" type="Text" value="@item.StockQuantity" placeholder="Stock" readonly>
+        <input class="stock-input" style="width:10rem; " type="Text" value="@item.AdditionalPrice" placeholder="AdditionalPrice" readonly>
+    </div>
+    <br />
+}
+</div>
+
+
+<a asp-controller="POT" asp-action="AddPOT" asp-route-productId="@ViewBag.productId" class="btn btn-outline-dark"><i class='bx bx-add-to-queue'></i> Add POT</a>
+

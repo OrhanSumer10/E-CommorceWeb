@@ -1,0 +1,42 @@
+﻿@model ProductListViewModel
+
+<div style="width:100%;">
+
+    @{
+        var userId = Convert.ToInt32(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+        var userCoupons = Model.couponUsers
+        .Where(x => x.UserId == userId)
+        .ToList();
+        var hasCoupon = userCoupons.Any();
+    }
+    @if (hasCoupon)
+    {
+        foreach (var userCoupon in userCoupons)
+        {
+            var coupon = Model.coupons.FirstOrDefault(c => c.CouponId == userCoupon.CouponId);
+            if (coupon != null)
+            {
+                var isUsed = userCoupon.isUsed;
+
+                <div class="alert-box" style="background-color:@(isUsed ? "#F8D7DA" : "#D4EDDA"); color: @(isUsed ? "#721C24" : "#155724"); display:flex; justify-content:space-between;">
+                    <span>İndirim Kodu : <strong>@coupon.Code</strong></span>
+                    <span>İndirim Oranı : <strong>%@coupon.Discount.ToString("F0")</strong></span>
+                    <span>
+                        @(isUsed ? "✅ KULLANILDI" : "🟢 KULLANILABİLİR")
+                    </span>
+                </div>
+            }
+        }
+    }
+    else 
+    {
+        <div class="alert-box" style="background-color:#F8D7DA; color: #721C24;">  İndirim Kuponunuz Yok ! </div>
+    }
+
+
+</div>
+
+
+
+
+

@@ -1,0 +1,38 @@
+﻿@model ProductListViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Coupon</h1>
+
+<table class="table table-bordered" id="admin-table">
+    <thead>
+        <tr>
+            <th scope="col">CouponId</th>
+            <th scope="col">Code</th>
+            <th scope="col">Discount</th>
+            <th scope="col">OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var not in Model.coupons)
+        {
+            <tr>
+                <td>@not.CouponId</td>
+                <td>@not.Code</td>
+                <td>@not.Discount.ToString("F0")</td>
+                <td>
+                    <form method="post" asp-controller="Coupon" asp-action="deleteCoupon" asp-route-CouponId="@not.CouponId">
+                        <button class="btn btn-danger">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-outline-dark" asp-controller="Coupon" asp-action="addCoupon"> <i class='bx bx-add-to-queue'></i>ADD COUPON</a>
+

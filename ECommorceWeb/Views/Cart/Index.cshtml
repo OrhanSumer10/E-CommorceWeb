@@ -1,0 +1,90 @@
+﻿@model CartListViewModel
+
+@if (Model.CartItems == null || !Model.CartItems.Any(p => p.isPaid == false))
+{
+    <h2 style="margin:2rem;">Sepetiniz boş </h2>
+}
+else
+{
+
+    @foreach (var product in Model.CartItems.Where(p => p.isPaid == false))
+    {
+        <div class="cart-content">
+            <div class="cc-left">
+                @if (Model.ProductImages != null) // Null kontrolü ekledik
+                {
+                    var productImages = Model.ProductImages
+                    .Where(a => a.productId == product.ProductId)
+                    .Select(img => $"data:{img.ContentType};base64,{Convert.ToBase64String(img.ImageData)}")
+                    .ToList(); // Listeye çevirdik
+
+                    <div id="carousel-@product.ProductId" class="carousel slide" data-bs-ride="carousel" style="width: 50px; margin: auto;">
+
+                        @if (productImages.Any()) // Liste boş değilse göster
+                        {
+                            <div class="carousel-inner">
+                                @for (int i = 0; i < productImages.Count; i++)
+                                {
+                                    var imageUrl = productImages[i];
+
+                                    <div class="carousel-item @(i == 0 ? "active" : "")" style="text-align: center;">
+                                        <img src="@imageUrl" style="display: block; margin: auto; max-width:50px; max-height: 50px;" />
+                                    </div>
+                                }
+                            </div>
+
+                        }
+                        else
+                        {
+                            <img src="" style="display: block; margin: auto; max-width:50px; max-height: 50px;" />
+                        }
+                    </div>
+                }
+                <div class="cc-left-text">
+                    <h5>@product.Product.Name</h5>
+                    <small>@product.Product.Description</small>
+                </div>
+            </div>
+
+            <div class="cc-mid">
+                <!-- Ürün Miktarını ve Toplam Fiyatı Göster -->
+                <div>
+                    <span>Option : @product.SelectedValue</span> <br>
+                    <span>Adet : @product.SelectedQuantity</span>
+                </div>
+            </div>
+
+            <div class="cc-right">
+                <span>@product.SelectedPrice.ToString("F2") ₺</span>
+                <form method="post" asp-controller="Cart" asp-action="RemoveFromCart">
+                    <input type="hidden" name="cartItemId" value="@product.CartItemId" />
+                    <button id="deleteCartItem" type="submit" class="btn btn-danger">
+                        <i class='fa-solid fa-trash'></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    }
+    <br />
+    <a href="/Payment/Index" class="btn btn-primary"> <i class="fa-solid fa-shopping-basket"></i> Sepeti Onayla </a>
+}
+
+<script>
+    document.getElementById("deleteCartItem").addEventListener("click", function (e) {
+        e.preventDefault(); // Sayfanın reload olmasını engelle
+
+        const form = this.closest("form"); // En yakın formu bul
+
+        confirmDialog(
+            "Sepetten Ürünü Silmek Üzeresiniz",
+            "Bu işlem geri alınamaz. Kupon kullandıysanız etkilenebilir. Devam etmek istiyor musunuz?",
+            function () {
+                form.submit(); // Onay verildiyse formu gönder
+            },
+            function () {
+                console.log("Silme işlemi iptal edildi.");
+            }
+        );
+    });
+</script>

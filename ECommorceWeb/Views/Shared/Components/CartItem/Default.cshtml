@@ -1,0 +1,91 @@
+﻿@model CartListViewModel
+
+@if (Model.CartItems == null || !Model.CartItems.Any(p => p.isPaid == false))
+{
+    <a class="dropdown-item" asp-controller="Product" asp-action="Index">Ürün ekleyin</a>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Image</th>
+                <th scope="col">Option</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">TotalPrice</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems.Where(p=>p.isPaid == false))
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>
+
+                        @if (Model.ProductImages != null) // Null kontrolü ekledik
+                        {
+                            var productImages = Model.ProductImages
+                            .Where(a => a.productId == @item.ProductId)
+                            .Select(img => $"data:{img.ContentType};base64,{Convert.ToBase64String(img.ImageData)}")
+                            .ToList(); // Listeye çevirdik
+
+                            <div id="carousel-@item .ProductId" class="carousel slide" data-bs-ride="carousel" style="width: 50px; margin: auto;">
+
+                                @if (productImages.Any()) // Liste boş değilse göster
+                                {
+                                    <div class="carousel-inner">
+                                        @for (int i = 0; i < productImages.Count; i++)
+                                        {
+                                            var imageUrl = productImages[i];
+
+                                            <div class="carousel-item @(i == 0 ? "active" : "")" style="text-align: center;">
+                                                <img src="@imageUrl" style="display: block; margin: auto; max-width:50px; max-height: 50px;" />
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img src="" style="display: block; margin: auto; max-width:50px; max-height: 50px;" />
+                                }
+                            </div>
+                        }
+
+                    </td>
+                    <td>@item.SelectedValue</td>
+                    <td>@item.SelectedQuantity</td>
+                    <td>@item.SelectedPrice.ToString("F2") ₺</td>
+                    <td>
+                        <form method="post" asp-controller="Cart" asp-action="RemoveFromCart">
+                            <input type="hidden" name="cartItemId" value="@item.CartItemId" />
+                            <button id="deleteCI" type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class='bx bx-x'></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<script>
+    document.getElementById("deleteCI").addEventListener("click", function (e) {
+        e.preventDefault(); // Sayfanın reload olmasını engelle
+
+        const form = this.closest("form"); // En yakın formu bul
+
+        confirmDialog(
+            "Sepetten Ürünü Silmek Üzeresiniz",
+            "Bu işlem geri alınamaz. Kupon kullandıysanız etkilenebilir. Devam etmek istiyor musunuz?",
+            function () {
+                form.submit(); // Onay verildiyse formu gönder
+                
+            },
+            function () {
+                console.log("Silme işlemi iptal edildi.");
+            }
+        );
+    });
+</script>

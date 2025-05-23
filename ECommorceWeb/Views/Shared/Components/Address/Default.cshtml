@@ -1,0 +1,94 @@
+﻿@model AddressListViewModel
+
+
+
+<div class="addressList">
+    @foreach (var address in Model.Listaddress)
+    {
+        <div class="box addressCart">
+            <form   method="post">
+                <input type="hidden" name="AddressId" value="@address.AddressId" /> <!-- Adres ID'sini gizli input ile gönder -->
+                <div class="aTop">
+                    <input type="hidden" name="AddressTitle" value="@address.AddressTitle" />
+                    <span>@address.AddressTitle</span>
+                </div>
+                <hr />
+                <div class="aBottom">
+                    <div class="aBottom-top">
+                        <span style="display: flex;">
+                            <input class="box t-input" style="width:40%; height:30px;" name="City" value="@address.City" />
+
+                            <input class="box t-input" style="width:40%; height:30px; margin-left:2.1rem;" name="State" value="@address.State" />
+                        </span>
+                        <span style="display: flex; flex-direction: column;">
+                            <input class="box t-input" style="width:90%; height:30px;margin-top:.2rem;" name="Neighbourhood" value="@address.Neighbourhood" />
+
+                            <input class="box t-input" style="width:90%; height:30px;margin-top:.2rem;" name="Street" value="@address.Street" />
+                            <input type="hidden" name="IsDefaultBilling" value="@address.IsDefaultBilling" />
+                            <input type="hidden" name="IsDefaultShipping" value="@address.IsDefaultShipping" />
+                        </span>
+                    </div>
+
+                    <div class="aBottom-bottom">
+                        <button id="saveBtn" data-id="@address.AddressId" type="submit" class="btn btn-outline-primary" asp-controller="Address" asp-action="UpdateAddress"><i class="fa-solid fa-pen"></i> Update</button>
+
+
+                        <!-- Adres ID'sini gizli input ile gönder -->
+                        <button  id="adBtn" data-id="@address.AddressId" type="submit" asp-controller="Address" asp-action="deleteAddress" class="btn btn-outline-danger">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+    <div class="box addressCart">
+        <form asp-controller="Address" asp-action="AddAddress" method="post">
+            <div class="aTop">
+                <input class="box t-input" style="width:40%; height:30px;" name="AddressTitle" placeholder="Address Title" value="" />
+            </div>
+            <hr />
+            <div class="aBottom">
+                <div class="aBottom-top">
+                    <span style="display: flex;">
+                        <input class="box t-input" style="width:40%; height:30px;" name="City" placeholder="City" />
+
+                        <input class="box t-input" style="width:40%; height:30px; margin-left:2.1rem;" placeholder="State" name="State" />
+                    </span>
+                    <span style="display: flex; flex-direction: column;">
+                        <input class="box t-input" style="width:90%; height:30px;margin-top:.2rem;" placeholder="Neighbourhood" name="Neighbourhood" />
+
+                        <input class="box t-input" style="width:90%; height:30px;margin-top:.2rem;" placeholder="Street" name="Street" />
+                    </span>
+                </div>
+
+                <div class="aBottom-bottom">
+                    <button id="saveBtn" type="submit" class="btn btn-outline-danger">
+                        <i class="fa-solid fa-paper-plane"></i> SAVE
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    document.getElementById("adBtn").addEventListener("click", function (e) {
+        e.preventDefault(); // Sayfanın reload olmasını engelle
+
+
+        const addressId = this.getAttribute("data-id");
+
+        confirmDialog(
+            "Adresi Silmek Üzeresiniz",
+            "Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
+            function () {
+                // Onaylanırsa adrese yönlendir
+                window.location.href = `/Address/deleteAddress?id=${addressId}`;
+            },
+            function () {
+                console.log("Silme iptal edildi.");
+            }
+        );
+    });
+</script>

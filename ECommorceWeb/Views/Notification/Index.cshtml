@@ -1,0 +1,54 @@
+﻿@using static Entities.Concrete.Notification;
+@model ProductListViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Notifcation</h1>
+
+<table class="table table-bordered" id="admin-table">
+    <thead>
+        <tr>
+            <th scope="col">NotificationId</th>
+            <th scope="col">Content</th>
+            <th scope="col">CreatedAt</th>
+            <th scope="col">Status</th>
+            <th scope="col">OPTION</th>
+        </tr>
+    </thead>
+
+    @foreach (var not in Model.notifications)
+    {
+        <tbody>
+            <tr>
+                <td>@not.NotificationId</td>
+                <td>@not.Content</td>
+                <td>@not.CreatedAt</td>
+                @{
+                    string textClass = not.status switch
+                    {
+                        NotificationStatus.Info => "text-info",           // Mavi
+                        NotificationStatus.Important => "text-danger",     // Kırmızı
+                        NotificationStatus.Promotion => "text-success",    // Yeşil
+                        NotificationStatus.Holiday => "text-purple",       // Mor
+                        NotificationStatus.Warning => "text-warning",      // Sarı
+                        NotificationStatus.System => "text-muted",         // Gri
+                        NotificationStatus.Other => "text-dark",           // Koyu gri
+                        _ => "text-light"                                  // Default (açık renk)
+                    };
+                }
+                <td class="@textClass">@not.status</td>
+                <td>
+
+                    <form method="post" asp-controller="Notification" asp-action="deleteNot" asp-route-NotificationId="@not.NotificationId">
+
+                        <button class="btn btn-danger"><i class="fa-solid fa-trash"></i> </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+<a class="btn btn-outline-dark" asp-controller="Notification" asp-action="addNot"> <i class='bx bx-add-to-queue'></i>ADD NOTIFCATION</a>

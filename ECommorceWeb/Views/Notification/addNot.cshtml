@@ -1,0 +1,31 @@
+﻿@model ProductListViewModel
+
+@{
+    ViewData["Title"] = "addNot";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>ADD NOTIFICATION</h1>
+
+<div style="width:90%;">
+    <form method="post" asp-controller="Notification" asp-action="addNot">
+
+
+        <label>Content</label>
+        <input class="form-control" placeholder="Content..." name="Content" />
+        <br />
+        <label for="createdAt">Tarih ve Saat:</label>
+        <input type="datetime-local" id="createdAt" name="CreatedAt" class="form-control" />
+        <br />
+        <label class="control-label">Bildirim Türü</label>
+        <select id="status" name="Status" class="form-control">
+            @foreach (var item in ViewBag.StatusList)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+        <br />
+        <button type="submit" class="btn btn-dark"> <i class="fa-solid fa-paper-plane"></i> Save Notification</button>
+    </form>
+
+</div>

@@ -1,0 +1,25 @@
+﻿@model CategoryListViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+<h2>Add Category</h2>
+
+<form class="form-control-plaintext" method="post">
+    <div class="add-product">
+        <div class="ap-left">
+            <label for="formGroupExampleInput">Category Name</label>
+            <input class="form-control" name="Name" type="text" placeholder="Enter Category Name">
+            <br />
+        </div>
+        <div class="ap-right">
+            <label for="formGroupExampleInput">Description</label>
+            <input class="form-control" name="Description" type="text" placeholder="Enter Description" />
+            <br />
+            <br />
+            <button type="submit" class="btn btn-outline-primary"> Kaydet <i class='bx bx-send'></i></button>
+
+        </div>
+
+    </div>
+</form>

@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+@using System.Linq
+@using Entities.Concrete;
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ECommorceWeb</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ECommorceWeb.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- or -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+ 
+    <header class="header-ecom">
+        <div class="header-left-side">
+            <i class='bx bx-store-alt'></i>
+            <h4>SNHFSTORE</h4>
+        </div>
+        <div class="header-middle-side">
+            <ul>
+
+                <li>
+                    <a asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li>
+                    <a href="/Product/Index">All Product</a>
+                </li>
+                @await Component.InvokeAsync("Menu")
+                <li>
+                    <a asp-controller="" asp-action="">About Us</a>
+                </li>
+                <li>
+                    <a asp-controller="" asp-action="">Contact Us</a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="header-right-side">
+            <div class="icon-links">
+                <ul>
+                    <li>
+                        <a href="#" title="Search"><i class="bx bx-search"></i></a>
+                    </li>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <li class="dropdown">
+                            <a class="dropbtn">
+                                <i class='bx bx-user'></i>
+                            </a>
+
+                            <div class="dropdown-content">
+
+                                <a class="btn-logout" asp-controller="User" asp-action="Profile">
+                                    <i class='bx bx-user'></i>   My Profile
+                                </a>
+                                @if (User.HasClaim("IsAdmin", "Admin"))
+                                {
+                                    <a class="btn-logout" asp-controller="Admin" asp-action="Index">
+                                        <i class='bx bxs-dashboard'></i>   Admin Panel
+                                    </a>
+                                }
+                                <a href="/Login/Logout" class="btn-logout"><i class='bx bx-log-out'></i>  Logout </a>
+
+
+                            </div>
+
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="dropdown">
+                            <a class="dropbtn">
+                                <i class='bx bx-user'></i>
+                            </a>
+
+                            <div class="dropdown-content">
+
+                                <a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a>
+
+                            </div>
+
+                        </li>
+
+                    }
+                    <li class="dropdown">
+                        <a href="/WishListItem/Index" class="dropbtn">
+                            <i class='bx bx-heart'></i>
+                        </a>
+
+                        <div class="dropdown-content" id="cartItem">
+
+                            @await Component.InvokeAsync("WLItem")
+
+                        </div>
+
+                    </li>
+                    <li class="dropdown">
+                        <a href="/Cart/Index" class="dropbtn">
+                            <i class='bx bx-shopping-bag'></i>
+                        </a>
+
+                        <div class="dropdown-content" id="cartItem">
+
+                            @await Component.InvokeAsync("CartItem")
+
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+
+
+    <main class="main-ecom">
+
+
+        @RenderBody()
+
+        <div class="toast" id="toastBox" style="display:none;"></div>
+    </main>
+
+
+
+
+    <script src="~/js/site.js"></script>
+    <script src="~/js/toast.js"></script>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

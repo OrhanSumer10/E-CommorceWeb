@@ -1,0 +1,45 @@
+﻿@model ProductListViewModel
+@{
+    ViewData["Title"] = "AddImage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+<div class="image-scroll-container">
+    @if (Model.ProductImages.ContainsKey(ViewBag.ProductId))
+    {
+        foreach (var img in Model.ProductImages[ViewBag.ProductId])
+        {
+            <div class="image-item">
+                <img src="@img.ImageBase64" alt="Product Image" />
+                <form asp-action="DeleteImage" asp-controller="Image" method="post" onsubmit="return confirm('Resmi silmek istediğinize emin misiniz?');">
+                    <input type="hidden" name="imageSrc" value="@img.ImageBase64" />
+                    <input type="hidden" name="pImgId" value="@img.pImgId" />
+                    <button type="submit" class="delete-btn">&times;</button>
+                </form>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Henüz resim yok.</p>
+    }
+</div>
+
+<hr />
+
+<h2>Yeni Resim Ekle</h2>
+
+<div class="alert-box" style="background-color:; width:50%; justify-content:space-around;">
+    <form asp-action="AddImage" asp-controller="Image" method="post" enctype="multipart/form-data" class="add-image-form">
+        <input type="hidden" name="productId" value="@ViewBag.ProductId" />
+        <input type="file" name="imageFile" accept="image/*" required />
+        <button class="btn btn-dark" type="submit">
+            <i class="fa-solid fa-paper-plane"></i> Ekle
+        </button>
+    </form>
+</div>
+
+
+

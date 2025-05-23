@@ -1,0 +1,139 @@
+﻿@model AUListViewModel
+
+
+
+<div class="box  profile-info-bottom">
+    <div class="profile-info-bottom-left">
+        <form method="post" asp-action="UpdateUser">
+            <input type="hidden" name="ApplicationUserId" value="@Model.AUser.ApplicationUserId" />
+
+            <div class="profile-info-bottom-left-name"> <span>Üyelik Bilgilerim</span> </div>
+            <div class="profile-info-bottom-left-input">
+                <div class="profile-info-bottom-left-input-top">
+                    <label>Ad</label>
+                    <input class="box t-input" name="Name" value="@Model.AUser.Name" />
+                </div>
+                <div class="space"></div>
+                <div class="profile-info-bottom-left-input-top">
+                    <label>Soyad</label>
+                    <input class="box t-input" name="LastName" value="@Model.AUser.LastName" />
+                </div>
+            </div>
+            <div class="profile-info-bottom-left-input">
+                <div class="profile-info-bottom-left-input-top">
+                    <label>E-Mail</label>
+                    <input class="box t-input" type="email" name="Email" value="@Model.AUser.Email" />
+                </div>
+                <div class="space"></div>
+                <div class="profile-info-bottom-left-input-top">
+                    <label>User Name</label>
+                    <input class="box t-input" name="UserName" value="@Model.AUser.UserName" />
+                </div>
+            </div>
+            <div class="profile-info-bottom-left-input-bottom">
+                <label>Cep Telefonu</label>
+                <input class="box t-input" name="PhoneNumber" value="@Model.AUser.PhoneNumber" />
+            </div>
+            <div class="profile-info-bottom-left-input">
+                <div class="profile-info-bottom-left-input-top">
+                    <label>Doğum Tarihi</label>
+                    <input class="box t-input" type="date" name="DateOfBirth" value="@Model.AUser.DateOfBirth?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="space"></div>
+                <div class="profile-info-bottom-left-input-top">
+                    <label>Cinsiyet</label>
+                    <input class="box t-input" name="Gender" value="@Model.AUser.Gender" />
+                </div>
+            </div>
+            <div class="profile-info-bottom-left-input-bottom">
+
+                <button class="btn btn-outline-secondary" onclick="showToastAndSave('Başarıyla Güncellendi','success')" type="submit">Güncelle <i class="bx bx-send"></i></button>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="profile-info-bottom-right">
+        <form id="pwForm" method="post" asp-action="UpdatePassword">
+            <input type="hidden" name="ApplicationUserId" value="@Model.AUser.ApplicationUserId" />
+
+            <div class="profile-info-bottom-left-name">
+                <span>Şifre Bilgilerim</span>
+            </div>
+
+            <div class="profile-info-bottom-left-input-bottom">
+                <label>Şu Anki Şifre </label>
+                <input id="currentPassowrd" class="box t-input" type="password" />
+
+
+
+            </div>
+            <div class="profile-info-bottom-left-input-bottom">
+                <label>Yeni Şifre</label>
+                <input id="pwText" class="box t-input" type="password" />
+
+            </div>
+            <div class="profile-info-bottom-left-input-bottom">
+                <label>Yeni Şifre Tekrar</label>
+                <input id="pwTextT" class="box t-input" type="password" name="PasswordHash" />
+
+            </div>
+            <div class="profile-info-bottom-left-input-bottom">
+                <button id="pwBtn" class="btn btn-outline-secondary">Güncelle <i class="bx bx-send"></i></button>
+            </div>
+        </form>
+
+    </div>
+</div>
+<br />
+<br />
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const pwBtn = document.getElementById("pwBtn");
+        if (!pwBtn) return;
+
+        pwBtn.addEventListener("click", function (event) {
+            const pwT = document.getElementById("pwText").value;
+            const pwTT = document.getElementById("pwTextT").value;
+            const currentPass = document.getElementById("currentPassowrd").value;
+
+            // Demo amaçlı frontend kontrol (gerçek uygulamada backend'de yapılmalı)
+            const existingPassword = "@Model.AUser.PasswordHash";
+
+            if (currentPass != existingPassword) {
+                showToast("Mevcut şifre yanlış.", "error");
+                event.preventDefault();
+                return;
+            }
+
+            if (pwT.length < 5 || pwTT.length < 5) {
+                showToast("Şifre en az 5 karakter olmalı.", "invalid");
+                event.preventDefault();
+                return;
+            }
+
+            if (pwT !== pwTT) {
+                showToast("Yeni şifreler uyuşmuyor.", "error");
+                event.preventDefault();
+                return;
+            }
+
+            // Tüm kontroller geçtiyse form gönderilsin (submit tipi buttonsa zaten gönderilir)
+            // İstersen Ajax ile gönderebilirsin, burda sadece toast gösteriyoruz.
+
+            showToastAndSave("Başarıyla Güncellendi.", "success");
+            // Toast görünme süresi 5 saniye ise, o kadar bekle ve sonra formu gönder
+            setTimeout(() => {
+                document.getElementById("pwForm").submit();
+            }, 3000);
+
+
+
+            // Eğer form gönderilmiyorsa manuel submit:
+            // document.getElementById("yourFormId").submit();
+        });
+      
+    });
+
+</script>
