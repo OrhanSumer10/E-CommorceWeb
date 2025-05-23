@@ -1,0 +1,507 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* ===== Colors ===== */
+    --body-color: #E4E9F7;
+    --sidebar-color: #FFF;
+    --primary-color: #695CFE;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-color: #707070;
+    /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.3s ease;
+    --tran-05: all 0.3s ease;
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-info-light: #dce1eb;
+    --color-dark: #363949;
+    --color-light: rgba(132, 139, 200, 0.18);
+    --color-primary-variant: #111e88;
+    --color-dark-variant: #677483;
+    --color-background: #f6f6f9;
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+    --box-shadow: 0 2rem 3rem var(--color-light);
+    --linear-grad: linear-gradient(to right, #141E30, #243B55);
+    --grad-clr1: #141E30;
+    --grad-clr2: #243B55;
+}
+
+.stars {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+    display: flex;
+}
+
+    .stars li {
+        color: #FFD700; /* Altın sarısı yıldız */
+        margin-right: 5px;
+        font-size: 16px;
+    }
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    font-family: "Poppins", sans-serif;
+    background-color: #F8F7FA;
+}
+
+.form-control-plaintext {
+    padding: 0 2rem 0 2rem;
+}
+
+.admin-container {
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
+
+.stock-input {
+    position: relative;
+    margin-top: 1rem;
+    width: 3rem;
+    min-height: 3rem;
+   text-align:center;
+}
+.ml-product-box {
+    background-color: rebeccapurple;
+    position: relative;
+    display: flex;
+    width: 5rem;
+    height: 5rem;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+}
+/* From Uiverse.io by Darlley */
+
+
+.pot-index {
+    display:flex;
+    flex-wrap:wrap;
+    margin:0 0 2rem 1rem;
+}
+
+.checkbox-wrapper-16 *,
+.checkbox-wrapper-16 *:after,
+.checkbox-wrapper-16 *:before {
+    
+    box-sizing: border-box;
+ 
+}
+
+.checkbox-wrapper-16 .checkbox-input {
+   
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(100%);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+    .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile {
+        border-color: #2260ff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        color: #fff;
+    }
+
+        .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile:before {
+            transform: scale(1);
+            opacity: 1;
+            background-color: #2260ff;
+            border-color: #2260ff;
+            color: #fff;
+            content: "✓";
+        }
+
+        .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile .checkbox-icon,
+        .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile .checkbox-label {
+            color: black;
+        }
+
+    .checkbox-wrapper-16 .checkbox-input:focus + .checkbox-tile {
+        border-color: #2260ff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
+    }
+
+        .checkbox-wrapper-16 .checkbox-input:focus + .checkbox-tile:before {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+.checkbox-wrapper-16 .checkbox-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    min-height: 3rem;
+    border-radius: 0.5rem;
+    border: 2px solid #b5bfd9;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.15s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+    .checkbox-wrapper-16 .checkbox-tile:before {
+        content: "";
+        font-size: 12px;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: .8rem;
+        height: .8rem;
+        border: 2px solid #b5bfd9;
+        border-radius: 50%;
+        top: 0.25rem;
+        left: 0.25rem;
+        opacity: 0;
+        transform: scale(0);
+        transition: 0.25s ease;
+    }
+
+    .checkbox-wrapper-16 .checkbox-tile:hover {
+        border-color: #fff;
+    }
+
+        .checkbox-wrapper-16 .checkbox-tile:hover:before {
+            transform: scale(1);
+            opacity: 1;
+        }
+.checkbox-wrapper-16 .checkbox-label {
+    color: #707070;
+    transition: 0.375s ease;
+    text-align: center;
+}
+
+/* From Uiverse.io by Darlley */
+
+.admin-container-left {
+    position: relative;
+    width: 15%;
+    height: 100%;
+    background-color: white;
+    box-shadow: var(--box-shadow);
+}
+
+    .admin-container-left .acl-navbar {
+        width: 100%;
+        height: 100vh;
+        display: flex; /* Flexbox kullanımı */
+        position: relative;
+        flex-direction: column;
+    }
+
+    .admin-container-left .acl-navbar-top {
+        width: 100%;
+        height: 10%;
+        display: flex; /* Flexbox kullanımı */
+        position: relative;
+        align-items: center; /* Dikeyde ortala */
+    }
+
+        .admin-container-left .acl-navbar-top span {
+            display: flex; /* Flexbox kullanımı */
+            position: relative;
+            align-items: center; /* Dikeyde ortala */
+            margin-left: 1rem;
+        }
+
+            .admin-container-left .acl-navbar-top span i {
+                font-size: 2rem;
+            }
+
+    .admin-container-left .acl-navbar-bottom {
+        width: 100%;
+        height: 85%;
+    }
+
+        .admin-container-left .acl-navbar-bottom ul {
+            list-style-type: none; /* Liste işaretlerini kaldırır */
+            padding: 0; /* İç boşluğu sıfırlar */
+            margin: 0; /* Dış boşluğu sıfırlar */
+        }
+
+            .admin-container-left .acl-navbar-bottom ul li {
+                margin: 0; /* Dış boşluğu sıfırlar */
+                margin-top: .2rem;
+                display: flex; /* Flexbox kullanarak içeriği hizalamak için */
+                align-items: center; /* Dikeyde ortalar */
+                justify-content: center;
+            }
+
+                .admin-container-left .acl-navbar-bottom ul li .acl-navbar-bottom-btn {
+                    color: black;
+                    padding: 1rem;
+                    width: 90%; /* Buton genişliğini artırın */
+                    height: 2.5rem; /* Buton yüksekliğini artırın */
+                    display: flex; /* Flexbox kullanarak içeriği hizalamak için */
+                    align-items: center; /* Dikeyde ortalar */
+                    border-radius: 5px;
+                    text-decoration: none; /* Bağlantı alt çizgiyi kaldırır */
+                    font-size: 1rem; /* Yazı boyutunu ayarlar */
+                }
+
+                    .admin-container-left .acl-navbar-bottom ul li .acl-navbar-bottom-btn:is(:link, :active, :visited).active {
+                        background-color: #EFEEF0;
+                    }
+
+                    .admin-container-left .acl-navbar-bottom ul li .acl-navbar-bottom-btn i {
+                        margin-right: 1rem;
+                    }
+
+                    .admin-container-left .acl-navbar-bottom ul li .acl-navbar-bottom-btn:hover {
+                        cursor: pointer;
+                        background-color: #EFEEF0; /* Hover durumunda arka plan rengini değiştirir */
+                    }
+
+
+.admin-container-right {
+    position: relative;
+    width: 85%;
+}
+
+    .admin-container-right .acr-top {
+        background-color: cadetblue;
+        width: 100%;
+        height: 10%;
+        display: flex; /* Flexbox kullanımı */
+        position: relative;
+        justify-content: center; /* Yatayda ortala */
+        align-items: center; /* Dikeyde ortala */
+    }
+
+    .admin-container-right .acr-bottom {
+        display: flex; /* Flexbox kullanımı */
+        flex-direction: column;
+        position: relative;
+        justify-content: start; /* Yatayda ortala */
+        align-items: center; /* Dikeyde ortala */
+        margin-top: 2rem;
+        width: 100%;
+        height: 90%;
+        padding: 0;
+    }
+
+
+
+.product-admin-img {
+    width: 50px;
+    height: 50px;
+}
+
+#admin-table {
+    width: 90%;
+}
+
+.carousel-control-prev, .carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5; /* Resimlerin üstünde olması için */
+}
+
+
+.carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    background-color: gray;
+    border-radius: 50%;
+    border: 1px solid white;
+}
+
+.carousel-indicators .active {
+    background-color: black;
+}
+.carousel-item img {
+    display: block;
+    margin: auto;
+    max-width: 100%; /* Carousel genişliğiyle uyumlu */
+    max-height: 300px; /* Carousel yüksekliğiyle uyumlu */
+}
+
+.acr-bottom-top {
+    display: flex; /* Flexbox kullanımı */
+    flex-direction: row;
+    justify-content: space-between;
+    height: 10%;
+    width: 100%;
+}
+
+.ad-box {
+    display: flex; /* Flexbox düzenini aktif et */
+    flex-direction: row;
+    width: 300px;
+    height: 80px;
+    justify-content: flex-start; /* Yatayda ortala */
+    align-items: center; /* Dikeyde ortala */
+    border-radius: .3rem;
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    margin: 0 2rem 0 2rem;
+}
+
+.ad-box-left {
+    margin-left: 1rem;
+}
+
+.ad-box-right {
+    margin-left: 1rem;
+}
+
+    .ad-box-right h6 {
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+.ad-box i {
+    font-size: 2rem;
+    color: white;
+    padding: .5rem;
+    background-color: crimson;
+    border-radius: .2rem;
+}
+
+.acr-bottom-bottom {
+    margin-top: 2rem;
+    width: 100%;
+    height: 90%;
+    display: flex; /* Flexbox kullanımı */
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.acr-bottom-left {
+    margin-left: 2rem;
+    border-radius: .2rem;
+    width: 70%;
+    height: 90%;
+    background-color: white;
+}
+
+.acr-bottom-right {
+    margin-right: 2rem;
+    border-radius: .2rem;
+    width: 20%;
+    height: 90%;
+    background-color: white;
+}
+
+.add-product {
+    width: 95%;
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+    .add-product .ap-left {
+        width: 45%;
+        height: 100%;
+    }
+
+    .add-product .ap-right {
+        width: 45%;
+        height: 100%;
+    }
+
+
+.update-img {
+    width: 75px;
+    height: 75px;
+}
+
+
+
+.img-slider-td {
+}
+
+
+
+
+
+.image-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.image-item {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    flex: 0 0 auto; /* yan yana dizilmek için */
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+    .image-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+.delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 0, 0, 0.7);
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+.alert-box {
+    display:flex;
+    width: 100%;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    font-weight: 500;
+}
+

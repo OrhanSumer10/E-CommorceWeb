@@ -1,0 +1,73 @@
+﻿@model ProductListViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h3>Update Product</h3>
+
+
+<form class="form-control-plaintext" method="post">
+    <div class="add-product">
+        <div class="ap-left">
+            <label for="formGroupExampleInput">Name</label>
+            <input class="form-control" name="Name" type="text" value="@Model.Product.Name" placeholder="Enter Name">
+            <br />
+            <label for="formGroupExampleInput">Category Name</label>
+            <select class="form-control" id="categorySelect" name="CategoryId" asp-items="@ViewBag.cv" asp-for="@Model.Product.CategoryId">
+                <option disabled>Seçiniz</option>
+            </select>
+            <br />
+            <label for="formGroupExampleInput">Sub Category Name</label>
+            <select class="form-control" id="subCategory" name="SubCategoryId" asp-for="@Model.Product.SubCategoryId">
+                <option selected disabled>Seçiniz</option>
+            </select>
+            <br />
+            <label for="formGroupExampleInput">Description</label>
+            <input class="form-control" type="text" name="Description" value="@Model.Product.Description" placeholder="Enter Description">
+            <br />
+            <label for="formGroupExampleInput">Price</label>
+            <input class="form-control" type="text" name="Price" value="@Model.Product.Price" placeholder="Enter Price">
+            <br />
+            <label for="formGroupExampleInput">Created Date</label>
+            <input class="form-control" type="date" name="CreatedDate" value="@Model.Product.CreatedDate.ToString("yyyy-MM-dd")" placeholder="Enter Created Date">
+        </div>
+        <div class="ap-right">
+            @if (Model.ProductImages.ContainsKey(Model.Product.ProductId) && Model.ProductImages[Model.Product.ProductId].Any())
+            {
+                foreach (var img in Model.ProductImages[Model.Product.ProductId])
+                {
+                    <img src="@img.ImageBase64" alt="Product Image" style="max-width:50px; max-height:50px; margin-left:.5rem;" />
+
+                }
+            }
+            else
+            {
+                <img src="#" style="max-width:50px; max-height:50px;" />
+            }
+            <br />
+            <a asp-controller="Image" asp-action="AddImage" asp-route-productId="@Model.Product.ProductId" class="btn btn-success">Add More Image</a>
+           
+            <br />
+            <br />
+            <label for="formGroupExampleInput">Manufacture Date</label>
+            <input class="form-control" type="date" name="ManufactureDate" value="@Model.Product.ManufactureDate.ToString("yyyy-MM-dd")" placeholder="Enter Manufacture Date">
+            <br />
+            <label for="formGroupExampleInput">Rating</label>
+            <input class="form-control" type="text" name="rating" value="@Model.Product.Rating" placeholder="Readonly input here…" readonly>
+            <br />
+            <label for="formGroupExampleInput">SKU</label>
+            <input class="form-control" type="text" name="SKU" value="@Model.Product.SKU" placeholder="Enter SKU">
+
+            <br />
+            <label for="formGroupExampleInput">Warranty Period</label>
+            <input class="form-control" type="text" name="WarrantyPeriod" value="@Model.Product.WarrantyPeriod" placeholder="Enter Warranty Period">
+            <br />
+            <button type="submit" class="btn btn-outline-info">Güncelle <i class='bx bx-send'></i></button>
+        </div>
+    </div>
+</form>
+
+
+
+

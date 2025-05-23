@@ -1,0 +1,27 @@
+﻿@using static Entities.Concrete.Notification;
+@model ProductListViewModel
+
+
+<div class="allMyOrders" style="width:100%;">
+    @foreach (var item in Model.notifications)
+    {
+        string bgColor = item.status switch
+        {
+            NotificationStatus.Info => "#CCE5FF",       // Mavi
+            NotificationStatus.Important => "#F8D7DA",  // Turuncu
+            NotificationStatus.Promotion => "#D4EDDA",  // Yeşil
+            NotificationStatus.Holiday => "#6f42c1",    // Mor
+            NotificationStatus.Warning => "#FFF3CD",    // Kırmızı
+            NotificationStatus.System => "#E2E3E5",     // Gri
+            NotificationStatus.Other => "#343a40",      // Koyu gri
+            _ => "#f8f9fa"                              // Default (açık gri)
+        };
+
+        <div class="alert-box" style="background-color:@bgColor; color: dark;">
+            <strong>@item.status!</strong> @item.Content <br>
+             <small> @item.CreatedAt</small>
+        </div>
+    }
+
+
+</div>

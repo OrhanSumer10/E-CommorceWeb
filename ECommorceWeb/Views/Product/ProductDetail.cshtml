@@ -1,0 +1,299 @@
+﻿@model ProductListViewModel
+@using System.Security.Claims
+
+@{
+    Layout = "_Layout";
+}
+
+
+
+@if (ViewBag.DiscountForProduct != null && ViewBag.DiscountF > 0)
+{
+    <p style="color:green;"> @ViewBag.DiscountF.ToString("F0")  % İNDİRİM  VAR!!</p>
+}
+
+<div class="pd-content">
+    <div class="pd-img">
+        @if (Model.ProductImages != null && Model.ProductImages.ContainsKey(Model.Product.ProductId) && Model.ProductImages[Model.Product.ProductId].Any())
+        {
+            <!-- Carousel Başlangıcı -->
+            <div id="carousel-@Model.Product.ProductId" class="carousel slide" data-bs-ride="carousel">
+                <!-- carousel-inner: İçinde her bir resim için bir "carousel-item" -->
+                <div class="carousel-inner">
+                    @for (int i = 0; i < Model.ProductImages[Model.Product.ProductId].Count; i++)
+                    {
+                        var image = Model.ProductImages[Model.Product.ProductId][i];
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <img class="pd-img-img" src="@image.ImageBase64" alt="Product Image" />
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="pdi-btn">
+                @for (int i = 0; i < Model.ProductImages[Model.Product.ProductId].Count; i++)
+                {
+                    <button type="button" data-bs-target="#carousel-@Model.Product.ProductId" data-bs-slide-to="@i" class="btn btn-outline-dark rounded-circle p-2 mx-1"></button>
+                }
+            </div>
+        }
+        else
+        {
+            <p>No images available for this product.</p>
+        }
+    </div>
+    <div class="pd-right">
+      
+        <h4>@Model.Product.Name</h4>
+        <!-- Yıldızların Razor ile Dinamik Gösterimi -->
+        @{
+            double rating = 0;
+            var ratings = ViewBag.ProductRatings as Dictionary<int, double>;
+
+            if (ratings != null && ratings.ContainsKey(Model.Product.ProductId))
+            {
+                rating = ratings[Model.Product.ProductId];
+            }
+        }
+        <ul class="stars">
+            @for (int i = 1; i <= 5; i++)
+            {
+                if (i <= Math.Floor(rating))
+                {
+                    <li><i class="bx bxs-star"></i></li> @* Dolu yıldız *@
+                }
+                else if (i - rating < 1)
+                {
+                    <li><i class="bx bxs-star-half"></i></li> @* Yarım yıldız *@
+                }
+                else
+                {
+                    <li><i class="bx bx-star"></i></li> @* Boş yıldız *@
+                }
+            }
+
+            <span>
+                <p>(@Math.Round(rating, 1))</p>
+            </span>
+        </ul>
+        <span>@Model.Product.Description</span>
+        <div class="quote">
+            @foreach (var item in Model.ProductOptions)
+            {
+
+                @if (item.StockQuantity > 0)
+                {
+                    <div class="checkbox-wrapper-16" style=" margin-right:1rem">
+                        <label class="checkbox-wrapper">
+                            <input class="checkbox-input" type="radio" value="@item.OptionValue" data-additionalprice="@item.AdditionalPrice" data-stock="@item.StockQuantity">
+                            <span class="checkbox-tile">
+                                <span class="checkbox-label">@item.OptionValue</span>
+                            </span>
+                        </label>
+                        <br>
+                        <span>@item.StockQuantity <br> adet </span>
+                    </div>
+                    <br />
+                }
+            }
+        </div>
+        <div class="quantity-content">
+            <div class="left-content">
+                <h6>Adet</h6>
+            </div>
+            <div class="right-content">
+                <div class="quantity buttons_added">
+                    <input type="button" value="-" class="minus"><input type="number" step="1" min="1" max="" name="quantity" value="1" title="qty" class="input-text qty text" size="4" pattern="" inputmode=""><input type="button" value="+" class="plus">
+                </div>
+            </div>
+        </div>
+        @{
+            double productPrice = Model.Product.Price;
+            double priceAfterProductDiscount = productPrice;
+            double? userDiscountPercent = null;
+
+            if (ViewBag.DiscountForProduct != null)
+            {
+                double productDiscountPercent = (double)ViewBag.DiscountForProduct.Discount;
+                priceAfterProductDiscount = productPrice * (1 - productDiscountPercent / 100);
+            }
+
+            if (ViewBag.DiscountForUser != null)
+            {
+                userDiscountPercent = (double)ViewBag.DiscountForUser.Discount;
+            }
+        }
+        @if (ViewBag.DiscountForUser != null && ViewBag.DiscountU > 0)
+        {
+
+
+
+            <div id="userCode">
+                <input type="text" class="form-control" placeholder="Kodunu Gir...." value="@ViewBag.DiscountForCode" readonly />  <br>
+                <button type="submit" id="useCodeBtn" onclick="showToastAndSave('Kod Başarılı Bir Şekilde Kullanıldı','succes')" data-userdiscount="@userDiscountPercent"
+                        data-baseprice="@priceAfterProductDiscount" class="btn btn-dark">
+                    Kodu Kullan
+                </button>
+                <br>
+            </div>
+            <br />
+
+        }
+
+        <div class="total">
+
+
+
+            <h4 id="totalPrice">Toplam: @priceAfterProductDiscount.ToString("F2") ₺</h4>
+            <form method="post" asp-action="AddToCart" asp-controller="Cart" asp-route-productId="@Model.Product.ProductId">
+                <input type="hidden" name="userCouponId" value="@ViewBag.DiscountForUser?.CouponId" />
+                <!-- Seçilen option value, additional price, stock quantity bilgilerini hidden inputlarla ekliyoruz -->
+                <input type="hidden" id="SelectedValue" name="SelectedValue" value="" />
+                <input type="hidden" id="SelectedPrice" name="SelectedPrice" value="" />
+                <input type="hidden" id="SelectedQuantity" name="SelectedQuantity" value="" />
+
+
+                <button id="addToCart" onclick="showToastAndSave('Başarıyla Sepete Eklendi','success')" class="btn btn-outline-dark" type="submit"> Add To Cart <i class="bx bx-shopping-bag"></i></button>
+            </form>
+        </div>
+        <br />
+
+    </div>
+
+</div>
+<div style=" width:50%; justify-content:center;">
+    @await Component.InvokeAsync("Review", new { productId = Model.Product.ProductId })
+</div>
+
+
+<script>
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let productPrice = @priceAfterProductDiscount;
+        let maxStock = 1;
+
+        const minusBtn = document.querySelector(".minus");
+        const plusBtn = document.querySelector(".plus");
+        const inputField = document.querySelector(".qty");
+        const checkboxes = document.querySelectorAll(".checkbox-input");
+        const addtocart = document.getElementById("addToCart");
+        const hiddenPriceInput = document.getElementById("SelectedPrice");
+        const totalPrice = document.getElementById("totalPrice");
+        const userCodeDiv = document.getElementById("userCode");
+
+        // Kodu Kullan butonu
+        const useCodeBtn = document.getElementById("useCodeBtn");
+        if (useCodeBtn) {
+            useCodeBtn.addEventListener("click", function () {
+                const discount = parseFloat(this.dataset.userdiscount);
+                const basePrice = parseFloat(this.dataset.baseprice);
+
+                if (!isNaN(discount) && !isNaN(basePrice)) {
+                    alert("Sepete Eklendikten sonra ürünü silerseniz kod kullanılmış sayılacak.");
+                    const newPrice = basePrice * (1 - discount / 100);
+                    totalPrice.innerText = `Toplam: ${newPrice.toFixed(2)} ₺`;
+                    productPrice = newPrice;
+                    hiddenPriceInput.value = newPrice.toFixed(2);
+                } else {
+                    alert("İndirim uygulanamadı.");
+                }
+                userCodeDiv.hidden = true;
+            });
+        }
+
+        // Seçenek değiştiğinde diğerlerini kapat
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", function () {
+                checkboxes.forEach(cb => {
+                    if (cb !== checkbox) cb.checked = false;
+                });
+                updateStockAndPrice();
+            });
+        });
+
+        // Azaltma butonu
+        minusBtn.addEventListener("click", function () {
+            let currentValue = parseInt(inputField.value);
+            if (currentValue > 1) {
+                inputField.value = currentValue - 1;
+                updateTotalPrice();
+            }
+        });
+
+        // Artırma butonu
+        plusBtn.addEventListener("click", function () {
+            let currentValue = parseInt(inputField.value);
+            if (currentValue < maxStock) {
+                inputField.value = currentValue + 1;
+                updateTotalPrice();
+            }
+        });
+
+        // Adet girilince kontrol
+        inputField.addEventListener("input", function () {
+            if (inputField.value > maxStock) {
+                inputField.value = maxStock;
+            }
+            updateTotalPrice();
+        });
+
+        // Sepete ekle butonu
+        addtocart.addEventListener("click", function (event) {
+            let selectedOption = document.querySelector(".checkbox-input:checked");
+            if (!selectedOption) {
+                event.preventDefault();
+                alert("Lütfen bir seçenek seçin!");
+                return;
+            }
+
+            document.getElementById("SelectedValue").value = selectedOption.value;
+            document.getElementById("SelectedPrice").value = (parseFloat(selectedOption.dataset.additionalprice) || 0) + parseFloat(productPrice) * inputField.value;
+            document.getElementById("SelectedQuantity").value = inputField.value;
+
+        });
+
+        function updateStockAndPrice() {
+            let selectedOption = document.querySelector(".checkbox-input:checked");
+            let minStock = Infinity;
+
+            if (selectedOption) {
+                let stockQuantity = parseInt(selectedOption.dataset.stock);
+                minStock = stockQuantity;
+
+                // ✅ Form input'u güncelle
+                document.getElementById("SelectedValue").value = selectedOption.value;
+            }
+
+            maxStock = (minStock === Infinity) ? 1 : minStock;
+            inputField.max = maxStock;
+            inputField.value = Math.min(inputField.value, maxStock);
+
+            updateTotalPrice();
+        }
+
+        function updateTotalPrice() {
+            let quantity = parseInt(inputField.value);
+            let selectedOption = document.querySelector(".checkbox-input:checked");
+            let extraPrice = selectedOption ? parseFloat(selectedOption.dataset.additionalprice) || 0 : 0;
+            let total = (productPrice + extraPrice) * quantity;
+
+            totalPrice.innerHTML = `Toplam: ${total.toFixed(2)} ₺`;
+
+            // 🔥 Formdaki gizli inputlara da yaz
+            document.getElementById("SelectedPrice").value = total.toFixed(2);
+            document.getElementById("SelectedQuantity").value = quantity;
+        }
+
+        updateStockAndPrice();
+    });
+
+
+
+
+
+
+</script>
+
+
+

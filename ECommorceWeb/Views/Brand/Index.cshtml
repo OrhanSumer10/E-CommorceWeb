@@ -1,0 +1,44 @@
+﻿@model BrandListViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2>Brand Page</h2>
+
+<table class="table table-bordered" id ="admin-table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model.Brands)
+    {
+        <tr>
+            <td>@item.brandId</td>
+            <td>@item.BrandName</td>
+            <td>@item.Description</td>
+            <td><a class="btn btn-outline-warning" asp-controller="Brand" asp-action="UpdateBrand" asp-route-brandId="@item.brandId"><i class='bx bx-edit-alt'></i></a></td>
+            <td>
+                <form method="post" asp-controller="Brand" asp-action="DeleteBrand"  onsubmit="return confirmDelete();">
+                    <input type="hidden" name="brandId" value="@item.brandId" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+
+</table>
+<a class="btn btn-outline-primary" asp-controller="Brand" asp-action="AddBrand"> <i class='bx bx-add-to-queue'></i>ADD BRAND</a>
+<script>
+    function confirmDelete() {
+        return confirm('Bu ürünü silmek istediğinize emin misiniz?'); // Kullanıcıdan onay al
+    }
+</script>

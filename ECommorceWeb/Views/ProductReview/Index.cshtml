@@ -1,0 +1,68 @@
+﻿@model ProductListViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+
+<h2> Reviews </h2>
+
+
+<table class="table table-bordered" style="max-width:90%;">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">User Name </th>
+            <th scope="col">Rating</th>
+            <th scope="col">Review Text</th>
+            <th scope="col">OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+           
+        
+        @foreach (var item in Model.reviews)
+        {
+            var user = Model.apUsers.FirstOrDefault(x => x.ApplicationUserId == item.UserId);
+            var product = Model.Products.FirstOrDefault(x => x.ProductId == item.ProductId);
+            double rating = 0;
+            var ratings = ViewBag.ProductRatings as Dictionary<int, double>;
+
+            @if (ratings != null && ratings.ContainsKey(Model.Product.ProductId))
+            {
+                rating = ratings[Model.Product.ProductId];
+            }
+
+            <tr>
+                <td>@item.ProductReviewId</td>
+                <td>@($"{product?.Name}")</td>
+                <td>  @(user != null ? $"{user.Name} {user.LastName}" : "Kullanıcı Bulunamadı")</td>
+                <td class="stars">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= Math.Floor(rating))
+                        {
+                            <li><i class="bx bxs-star"></i></li> @* Dolu yıldız *@
+                        }
+                        else if (i - rating < 1)
+                        {
+                            <li><i class="bx bxs-star-half"></i></li> @* Yarım yıldız *@
+                        }
+                        else
+                        {
+                            <li><i class="bx bx-star"></i></li> @* Boş yıldız *@
+                        }
+                    }
+                </td>
+                <td>@item.ReviewText</td>
+                <td>
+                    <button class="btn btn-dark"> <i class="fa-solid fa-edit"></i></button>
+                    <button class="btn btn-danger"><i class="fa-solid fa-trash"></i> </button>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

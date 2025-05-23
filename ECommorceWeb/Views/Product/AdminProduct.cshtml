@@ -1,0 +1,140 @@
+﻿@model ProductListViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+
+<h2>Product List</h2>
+
+<table class="table table-bordered" id="admin-table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Sub Category Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+            <th scope="col">Created Date</th>
+            <th scope="col">Add Image</th>
+            <th scope="col">Manufacture Date</th>
+            <th scope="col">Rating</th>
+            <th scope="col">SKU</th>
+            <th scope="col">Stock</th>
+            <th scope="col">WP</th>
+            <th scope="col">OPTION</th>
+        </tr>
+    </thead>
+    @foreach (var product in Model.Products)
+    {
+        double rating = 0;
+        var ratings = ViewBag.ProductRatings as Dictionary<int, double>;
+        if (ratings != null && ratings.ContainsKey(product.ProductId))
+        {
+            rating = ratings[product.ProductId];
+        }
+        <tbody>
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.Name</td>
+                <td>
+                    @* Kategori adı sözlükten alınıyor *@
+                    @if (ViewBag.CategoryNames != null && ViewBag.CategoryNames.ContainsKey(product.CategoryId))
+                    {
+                        @ViewBag.CategoryNames[product.CategoryId]
+                    }
+                    else
+                    {
+                        <span>Bilinmeyen Kategori</span>
+                    }
+                </td>
+                <td>
+                    @* Kategori adı sözlükten alınıyor *@
+                    @if (ViewBag.subCategoryNames != null && ViewBag.subCategoryNames.ContainsKey(product.SubCategoryId))
+                    {
+                        @ViewBag.subCategoryNames[product.SubCategoryId]
+                    }
+                    else
+                    {
+                        <span>Bilinmeyen Kategori</span>
+                    }
+                </td>
+                <td>@product.Description</td>
+                <td>@product.Price</td>
+                <td>@product.CreatedDate.ToShortDateString()</td>
+                <td>
+                    @if (Model.ProductImages.ContainsKey(product.ProductId) && Model.ProductImages[product.ProductId].Any())
+                    {
+                        <div id="carousel-@product.ProductId" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @for (int i = 0; i < Model.ProductImages[product.ProductId].Count; i++)
+                                {
+                                    var img = Model.ProductImages[product.ProductId][i];
+                                    <div class="carousel-item @(i == 0 ? "active" : "") d-flex justify-content-center align-items-center" >
+                                        <img src="@img.ImageBase64" alt="Product Image" style="max-width: 50px; max-height: 50px; object-fit: cover; border-radius: 8px;" />
+
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    else
+                    {
+                        <a asp-controller="Image" asp-action="AddImage" asp-route-productId="@product.ProductId" class='btn btn-danger'>Add</a>
+                    }
+                </td>
+                <td>@product.ManufactureDate.ToShortDateString()</td>
+                <td class="stars">
+
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= Math.Floor(rating))
+                        {
+                            <li><i class="bx bxs-star"></i></li> @* Dolu yıldız *@
+                        }
+                        else if (i - rating < 1)
+                        {
+                            <li><i class="bx bxs-star-half"></i></li> @* Yarım yıldız *@
+                        }
+                        else
+                        {
+                            <li><i class="bx bx-star"></i></li> @* Boş yıldız *@
+                        }
+                    }
+                </td>
+                <td>@product.SKU</td>
+                <td>
+                    @* Toplam stoğu ViewBag'den al *@
+                    @{
+                        var productStocks = (Dictionary<int, int>)ViewBag.ProductStocks;
+                        var totalStock = productStocks.ContainsKey(product.ProductId) ? productStocks[product.ProductId] : 0;
+                    }
+                    @totalStock
+                </td>
+                <td>@product.WarrantyPeriod</td>
+                <td style="display:flex;">
+                    <a class="btn btn-outline-dark" asp-controller="POT" asp-action="Index" asp-route-productId="@product.ProductId"><i class='bx bx-selection'></i></a>
+
+                    <a style="margin:0 .5rem 0 .5rem;" class="btn btn-outline-warning" asp-controller="Product" asp-action="UpdateProduct" asp-route-productId="@product.ProductId"><i class='bx bx-edit-alt'></i></a>
+
+                    <form method="post" asp-controller="Product" asp-action="DeleteProduct" onsubmit="return confirmDelete();">
+                        <input type="hidden" name="productId" value="@product.ProductId" />
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class='bx bx-x'></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+<a class="btn btn-outline-primary" asp-controller="Product" asp-action="AddProduct"> <i class='bx bx-add-to-queue'></i>ADD PRODUCT</a>
+
+<script>
+    function confirmDelete() {
+        return confirm('Bu ürünü silmek istediğinize emin misiniz?'); // Kullanıcıdan onay al
+    }
+</script>

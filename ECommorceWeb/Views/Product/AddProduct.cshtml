@@ -1,0 +1,65 @@
+﻿@model ProductListViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h3>Add Product</h3>
+
+
+<form class="form-control-plaintext" method="post">
+    <div class="add-product">
+        <div class="ap-left">
+            <label for="formGroupExampleInput">Name</label>
+            <input class="form-control" name="Name" type="text" placeholder="Enter Name">
+            <br />
+            <label for="formGroupExampleInput">Category Name</label>
+            <select class="form-control" id="categorySelect" name="CategoryId" asp-items="@ViewBag.cv" asp-for="@Model.Product.CategoryId">
+                <option disabled>Seçiniz</option>
+            </select>
+            <br />
+            <label for="formGroupExampleInput">Sub Category Name</label>
+            <select class="form-control" id="subCategory" name="SubCategoryId" asp-for="@Model.Product.SubCategoryId">
+            </select>
+           @*  <br />
+            <div class="checkbox-wrapper-16">
+                <label class="checkbox-wrapper">
+                    <input class="checkbox-input" type="checkbox">
+                    <span class="checkbox-tile">
+                        <span class="checkbox-label">32</span>
+                    </span>
+                </label>
+            </div> *@
+            <br />
+            <label for="formGroupExampleInput">Description</label>
+            <input class="form-control" type="text" name="Description" placeholder="Enter Description">
+            <br />
+            <label for="formGroupExampleInput">Price</label>
+            <input class="form-control" type="text" name="Price" placeholder="Enter Price">
+            <br />
+            <label for="formGroupExampleInput">Created Date</label>
+            <input class="form-control" type="date" name="CreatedDate" placeholder="Enter Created Date">
+        </div>
+        <div class="ap-right">
+            <label for="formGroupExampleInput">ManufactureDate</label>
+            <input class="form-control" type="date" name="ManufactureDate" placeholder="Enter Manufacture Date">
+            <br />
+            <label for="formGroupExampleInput">Rating</label>
+            <input class="form-control" type="text" placeholder="Readonly input here…" readonly>
+            <br />
+            <label for="formGroupExampleInput">SKU</label>
+            <input class="form-control" type="text" name="SKU" placeholder="Enter SKU">
+            <br />
+            <label for="formGroupExampleInput">
+                Warranty Period
+            </label>
+            <input class="form-control" type="text" name="WarrantyPeriod" placeholder="Enter  Warranty Period">
+            <br />
+            <button type="submit" class="btn btn-outline-success"> Submit <i class='bx bx-send'></i></button>
+
+        </div>
+
+    </div>
+
+
+</form>

@@ -1,0 +1,71 @@
+﻿@model ProductListViewModel
+
+@if (Model.wishlistItems == null || !Model.wishlistItems.Any())
+{
+    <h2 style="margin:2rem;">Favori Listeniz boş </h2>
+}
+else
+{
+
+    <div style="display:flex;">
+
+        @foreach (var product in Model.wishlistItems)
+        {
+              
+            double rating = 0;
+            var ratings = ViewBag.ProductRatings as Dictionary<int, double>;
+
+            if (ratings != null && ratings.ContainsKey(product.Product.ProductId))
+            {
+                rating = ratings[product.Product.ProductId];
+            }
+        
+            <div class="ml-product">
+                @if (Model.Product != null
+               && Model.ProductImages != null
+               && Model.ProductImages.ContainsKey(Model.Product.ProductId)
+               && Model.ProductImages[Model.Product.ProductId]?.Any() == true)
+                {
+                    var image = Model.ProductImages[Model.Product.ProductId].FirstOrDefault();
+
+                    <div class="p-product-box" style="background-image:url('@image.ImageBase64'); width:15rem; height:15rem;">
+
+
+                        <form action="@Url.Action("ProductDetail", "Product")">
+                            <input type="hidden" name="ProductId" value="@product.ProductId" />
+                            <button class="pb-btn" type="submit" style="border:none;width:3rem; height:3rem;">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </form>
+
+                    </div>
+                }
+                <h4 style="font-weight:700;">@product.Product.Name</h4>
+                <h6 class="text-muted">
+                    @product.Product.Price ₺ <span class="stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Math.Floor(rating))
+                            {
+                                <li><i class="bx bxs-star"></i></li> @* Dolu yıldız *@
+                            }
+                            else if (i - rating < 1)
+                            {
+                                <li><i class="bx bxs-star-half"></i></li> @* Yarım yıldız *@
+                            }
+                            else
+                            {
+                                <li><i class="bx bx-star"></i></li> @* Boş yıldız *@
+                            }
+                        }
+                    </span>
+                </h6>
+
+            </div>
+
+        }
+    </div>
+
+}
+
+

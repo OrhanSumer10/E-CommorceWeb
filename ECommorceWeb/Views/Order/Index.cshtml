@@ -1,0 +1,150 @@
+﻿@using Entities.Concrete;
+@model ProductListViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Orders</h1>
+
+<table class="table table-bordered" style="max-width:90%;">
+    <thead>
+        <tr>
+            <th scope="col">User Name</th>
+            <th scope="col">Img</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Value</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Payment Method</th>
+            <th scope="col">Address</th>
+            <th scope="col">OPTION     </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.orders)
+        {
+            // Ödeme yapılan ürünleri al
+            var cartItemsForOrder = Model.cartItems
+            .Where(c => c.CartItemId == item.cartitemId && c.isPaid == true)
+            .ToList();
+
+
+            // Kullanıcının varsayılan adresi
+            var addressForOrder = Model.addresses.FirstOrDefault(a => a.UserId == item.UserId && a.IsDefaultShipping);
+
+            var user = Model.apUsers.FirstOrDefault(x => x.ApplicationUserId == item.UserId);
+
+            @foreach (var cart in cartItemsForOrder)
+            {
+                var productImages = Model.productImages
+                .Where(image => image.productId == cart.ProductId)
+                .Select(img => $"data:{img.ContentType};base64,{Convert.ToBase64String(img.ImageData)}")
+                .ToList();
+
+                <tr>
+                    <td>@($"{user?.Name} {user?.LastName}")</td> <!-- Kullanıcı ID -->
+                    <td>
+                        <div class="orderTableCart">
+                            @if (productImages.Any()) // Fotoğraf varsa
+                            {
+                                <div id="carousel-@cart.ProductId" class="carousel slide" data-bs-ride="carousel" style="width: 50px; margin: auto;">
+                                    <div class="carousel-inner">
+                                        @for (int i = 0; i < productImages.Count; i++)
+                                        {
+                                            var imageUrl = productImages[i];
+                                            <div class="carousel-item @(i == 0 ? "active" : "")" style="text-align: center;">
+                                                <img src="@imageUrl" style="display: block; margin: auto; max-width:50px; max-height: 50px;" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <img src="default_image_url.jpg" style="display: block; margin: auto; max-width:50px; max-height: 50px;" />
+                            }
+                        </div>
+                    </td>
+
+                    <td>
+                        @cart.Product.Name
+                    </td> <!-- Ürün adı -->
+                    <td>@cart.SelectedPrice.ToString("F2") ₺</td> <!-- Ürün fiyatı -->
+                    <td>@cart.SelectedValue</td> <!-- Ürün adı -->
+                    <td>@cart.SelectedQuantity</td> <!-- Ürün miktarı -->
+                    <td>@item.OrderDate.ToString("dd/MM/yyyy")</td> <!-- Sipariş tarihi -->
+                    <td>
+                        @{
+                            var statusClass = item.Status switch
+                            {
+                                Order.OrderStatus.Pending => "text-warning", // Sarı
+                                Order.OrderStatus.Processing => "text-primary", // Mavi
+                                Order.OrderStatus.Shipped => "text-info", // Açık mavi
+                                Order.OrderStatus.Delivered => "text-success", // Yeşil
+                                Order.OrderStatus.Cancelled => "text-danger", // Kırmızı
+                                Order.OrderStatus.Returned => "text-secondary", // Gri
+                                _ => "text-dark" // Varsayılan renk
+                            };
+                        }
+                        <form method="post" style="display:inline;" asp-action="OSUpdate" asp-controller="Order">
+                            <input type="hidden" name="orderId" value="@item.OrderId" />
+
+                            <select name="status" class="form-select d-inline w-auto @statusClass" onchange="this.form.submit()">
+                                @foreach (Order.OrderStatus stat in Enum.GetValues(typeof(Order.OrderStatus)))
+                                {
+                                    var selected = item.Status == stat ? "selected" : "";
+                                    var className = stat switch
+                                    {
+                                        Order.OrderStatus.Pending => "text-warning",
+                                        Order.OrderStatus.Processing => "text-primary",
+                                        Order.OrderStatus.Shipped => "text-info",
+                                        Order.OrderStatus.Delivered => "text-success",
+                                        Order.OrderStatus.Cancelled => "text-danger",
+                                        Order.OrderStatus.Returned => "text-secondary",
+                                        _ => "text-dark"
+                                    };
+                                    <option value="@stat" class="@className" selected="@(item.Status == stat ? "selected" : null)">
+                                        @stat
+                                    </option>
+                                }
+                            </select>
+                        </form>
+                      
+                    </td>
+                    <td>@(item.Payment != null ? item.Payment.ToString() : "Ödeme bilgisi yok")</td> <!-- Ödeme bilgisi -->
+                    <td>
+                        @if (addressForOrder != null)
+                        {
+                            var street = addressForOrder.Street ?? "Bilgi yok";
+                            var city = addressForOrder.City ?? "Bilgi yok";
+                            var neighbourhood = addressForOrder.Neighbourhood ?? "Bilgi yok";
+                            var apt = addressForOrder.AddressTitle ?? "Bilgi yok";
+                            <div style="font-size:13px;">@apt <br> @street <br> @city, @neighbourhood</div>
+                        }
+                        else
+                        {
+                            <div>Adres bilgisi mevcut değil</div>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-dark"> <i class="fa-solid fa-edit"></i></button>
+                        <form action="/Order/ODelete" method="post" style="display:inline;">
+                            <input type="hidden" name="orderId" value="@item.OrderId" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Silmek istediğinize emin misiniz?')">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                        <a href="@Url.Action("Invoice", "Order", new { orderId = item.OrderId })" target="_blank" class="btn btn-primary">
+                            <i class="fa-solid fa-receipt"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+

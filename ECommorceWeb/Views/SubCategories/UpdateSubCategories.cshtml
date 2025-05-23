@@ -1,0 +1,36 @@
+﻿@model SubCategoriesListViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2>Update Sub Categroies</h2>
+
+<form class="form-control-plaintext" method="post">
+    <div class="add-product">
+        <div class="ap-left">
+            <label for="formGroupExampleInput">Sub Category Name</label>
+            <input class="form-control" name="SCName" type="text" value="@Model.subCategory.SCName"  placeholder="Enter Sub Category Name">
+            <br />
+        </div>
+        <div class="ap-right">
+            <label for="formGroupExampleInput">Select Parent Category </label>
+            <select class="form-control" asp-for="@Model.subCategory.ParentCategoryId" name="ParentCategoryId">
+                <option disabled>Seçiniz</option>
+                @foreach (var item in (List<SelectListItem>)ViewBag.cv)
+                {
+                    <option value="@item.Value">
+                        @item.Text
+                    </option>
+                }
+              
+            </select>
+            <br />
+            <br />
+            <button type="submit" class="btn btn-outline-primary"> Kaydet <i class='bx bx-send'></i></button>
+
+        </div>
+
+    </div>
+
+</form>

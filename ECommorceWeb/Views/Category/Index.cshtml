@@ -1,0 +1,47 @@
+﻿@model ProductListViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2>Category List</h2>
+
+<table class="table table-bordered" id="admin-table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">EDİT </th>
+            <th scope="col">DELETE </th>
+        </tr>
+    </thead>
+    @foreach (var product in Model.Categories)
+    {
+        <tbody>
+            <tr>
+                <td>@product.CategoryId</td>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+          
+                <td><a class="btn btn-outline-warning" asp-controller="Category" asp-action="UpdateCategory" asp-route-categoryId="@product.CategoryId"><i class='bx bx-edit-alt'></i></a></td>
+                <td>
+                    <form method="post" asp-controller="Category" asp-action="DeleteCategory" onsubmit="return confirmDelete();">
+                        <input type="hidden" name="categoryId" value="@product.CategoryId" />
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class='bx bx-x'></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+<a class="btn btn-outline-primary" asp-controller="Category" asp-action="AddCategory"> <i class='bx bx-add-to-queue'></i>ADD CATEGORY</a>
+
+<script>
+    function confirmDelete() {
+        return confirm('Bu ürünü silmek istediğinize emin misiniz?'); // Kullanıcıdan onay al
+    }
+</script>

@@ -1,0 +1,56 @@
+﻿@model SubCategoriesListViewModel
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2>Sub Categories</h2>
+
+
+<table class="table table-bordered" id="admin-table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">SubCategory Name</th>
+            <th scope="col">Parent Kategori</th>
+            <th scope="col">EDİT </th>
+            <th scope="col">DELETE </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.SubCategories)
+    {
+        <tbody>
+            <tr>
+                <td>@item.SubCategoryId</td>
+                <td>@item.SCName</td>
+                <td>
+                    @if (ViewBag.CategoryNames != null && ViewBag.CategoryNames.ContainsKey(item.ParentCategoryId))
+                    {
+                        @ViewBag.CategoryNames[item.ParentCategoryId]
+                    }
+                    else
+                    {
+                        <span>Bilinmeyen Kategori</span>
+                    }
+                </td>
+
+                <td><a class="btn btn-outline-warning" asp-controller="SubCategories" asp-action="UpdateSubCategories" asp-route-subCategoryId="@item.SubCategoryId"><i class='bx bx-edit-alt'></i></a></td>
+                <td>
+                    <form method="post" asp-controller="SubCategories" asp-action="DeleteSubCategories" onsubmit="return confirmDelete();">
+                        <input type="hidden" name="subCategoryId" value="@item.SubCategoryId" />
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class='bx bx-x'></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+<a class="btn btn-outline-primary" asp-controller="SubCategories" asp-action="AddSubCategories"> <i class='bx bx-add-to-queue'></i>ADD SUB CATEGORY</a>
+
+<script>
+    function confirmDelete() {
+        return confirm('Bu ürünü silmek istediğinize emin misiniz?'); // Kullanıcıdan onay al
+    }
+</script>

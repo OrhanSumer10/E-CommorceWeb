@@ -1,0 +1,105 @@
+﻿@model ProductListViewModel
+
+<div class="container" style="width:100%;">
+
+
+
+    <h4 class="mb-4">Ürün Yorumları</h4>
+
+    @if (Model.reviews == null || !Model.reviews.Any())
+    {
+        <h4 class="mb-4">Yorum Yok</h4>
+    }
+    else
+    {
+        <div class="reviews-container" style="height: 400px; overflow-y: scroll;">
+            @foreach (var item in Model.reviews)
+            {
+                var user = Model.apUsers.FirstOrDefault(u => u.ApplicationUserId == item.UserId);
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img src="" class="rounded-circle me-3" style="width:20px; height:20px;" alt="User Avatar">
+                                <div>
+                                    <h6 class="mb-0">@($"{user?.Name} {user?.LastName}")</h6>
+                                    <small class="text-muted">@item.ReviewDate.ToString("d MMMM yyyy", new System.Globalization.CultureInfo("tr-TR"))</small>
+
+                                </div>
+                            </div>
+
+                            <div class="text-warning ratingStars" data-rating="@item.Rating">
+                                <!-- Yıldızlar render edilecek -->
+                            </div>
+                        </div>
+                        <p class="mt-3 mb-1">@item.ReviewText</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+
+    <h4 class="mb-4">Yorum Yap</h4>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" asp-action="AddReview" asp-controller="ProductReview">
+                <div class="mb-3">
+                    <label for="userName" class="form-label">Adınız</label>
+                    <input type="hidden" class="form-control" name="UserId" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
+                    <input type="text" class="form-control" name="UserId" value="@User.Identity.Name" placeholder="Adınızı Girin..."  readonly/>
+
+
+                    <input type="hidden" class="form-control" value="dateReview">
+                    <!-- ProductId'yi almak için hidden input kullanıyoruz -->
+                    @{
+                        var productId = Context.Request.Query["ProductId"];
+                    }
+                    <input type="hidden" class="form-control" id="ProductId" name="ProductId" value="@productId" readonly />
+                    <input type="hidden" class="form-control" id="ReviewDate" name="ReviewDate" value="@DateTime.Now" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Puan</label>
+                    <select class="form-select" id="Rating" name="Rating">
+                        <option selected disabled>Seçiniz</option>
+                        <option value="5">★★★★★ - Mükemmel</option>
+                        <option value="4">★★★★☆ - İyi</option>
+                        <option value="3">★★★☆☆ - Orta</option>
+                        <option value="2">★★☆☆☆ - Kötü</option>
+                        <option value="1">★☆☆☆☆ - Berbat</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="commentText" class="form-label">Yorum</label>
+                    <textarea class="form-control" name="ReviewText" id="commentText" rows="3" placeholder="Yorumunuzu yazın..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Yorum Gönder</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function renderStars(rating) {
+        const fullStar = '★';
+        const emptyStar = '☆';
+        const totalStars = 5;
+        let stars = '';
+
+        for (let i = 1; i <= totalStars; i++) {
+            stars += i <= rating ? fullStar : emptyStar;
+        }
+
+        return stars;
+    }
+
+    document.querySelectorAll('.ratingStars').forEach(el => {
+        const rating = parseInt(el.dataset.rating);
+        el.innerText = renderStars(rating);
+    });
+</script>

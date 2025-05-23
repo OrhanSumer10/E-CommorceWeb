@@ -1,0 +1,150 @@
+﻿@model ProductListViewModel
+@{
+    ViewData["Title"] = "AddPOT";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>AddPOT</h1>
+
+
+
+
+<form class="form-control-plaintext" method="post">
+
+    <label for="option">Option Name  </label>
+    <select class="form-control" id="option" name="optionId">
+        <option value="">Seçiniz</option>
+        <option value="number">Numara</option>
+        <option value="size-number">Beden Sayı</option>
+        <option value="size">Beden</option>
+    </select>
+
+    <div id="number" style="display:none; margin:1rem 0 1rem 0;">
+    </div>
+    <div id="size-number" style="display:none; margin:1rem 0 1rem 0;">
+    </div>
+    <div id="size" style="display:none; margin:1rem 0 1rem 0;">
+    </div>
+
+
+
+    <br />
+    <button class="btn btn-outline-dark" type="submit">SAVE <i class='bx bx-save'></i></button>
+    <script>
+        document.getElementById("option").addEventListener("change", function () {
+
+            console.log(this.value);
+
+            let section = ["number", "size-number", "size"];
+
+            let selecetSection = section.forEach(id => {
+                let element = document.getElementById(id);
+                if (element) element.style.display = "none";
+            });
+
+            let selectedSection = document.getElementById(this.value);
+            if (selectedSection) {
+                selectedSection.style.display = "flex"; //seçilen valuenin değerini block yap
+            }
+        });
+
+
+        let numbers = [30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45];
+        let container = document.getElementById("number");
+
+        // Checkboxları oluşturup `number` div'ine ekleyelim
+        container.innerHTML = numbers.map(num => `
+                                                            <div class="checkbox-wrapper-16" style=" margin-right:1rem">
+                                                        <label class="checkbox-wrapper">
+                                                            <input class="checkbox-input" type="checkbox" value="${num}">
+                                                            <span class="checkbox-tile">
+                                                                <span class="checkbox-label">${num}</span>
+                                                            </span>
+                                                        </label>
+                                                                     <input  class="stock-input" type="Text" value="" placeholder="Stock">
+                                                    </div>
+                                                `).join("");
+
+        let sizenumber = [32, 34, 36, 40, 42, 44, 46, 48, 50, 52, 54];
+
+        let containersn = document.getElementById("size-number");
+
+        containersn.innerHTML = sizenumber.map(num => `
+                                                                            <div class="checkbox-wrapper-16" style=" margin-right:1rem">
+                                                                <label class="checkbox-wrapper">
+                                                                    <input class="checkbox-input" type="checkbox" value="${num}">
+                                                                    <span class="checkbox-tile">
+                                                                        <span class="checkbox-label">${num}</span>
+                                                                    </span>
+                                                                </label>
+                                                                             <input  class="stock-input" type="Text" value="" placeholder="Stock">
+                                                            </div>
+                                                        ` ).join("");
+
+        let size = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+        let containers = document.getElementById("size");
+
+        containers.innerHTML = size.map(num => `
+                                                                    <div class="checkbox-wrapper-16" style=" margin-right:1rem">
+                                                                <label class="checkbox-wrapper">
+                                                                    <input class="checkbox-input" type="checkbox" value="${num}">
+                                                                    <span class="checkbox-tile">
+                                                                        <span class="checkbox-label">${num}</span>
+                                                                    </span>
+                                                                </label>
+                                                                             <input  class="stock-input" type="Text" value="" placeholder="Stock">
+                                                            </div>
+                                                        `).join("");
+
+
+
+
+        document.querySelector("form").addEventListener("submit", function (e) {
+            e.preventDefault(); // sayfanın yenilenmesini engelliyorum
+
+            let selectedOption = [];
+            let productId = @ViewBag.productId;
+
+            document.querySelectorAll(".checkbox-input:checked").forEach(checkbox => {
+                let stockInput = checkbox.closest(".checkbox-wrapper-16").querySelector(".stock-input");
+                let stockValue = stockInput ? parseInt(stockInput.value) || 0 : 0;
+
+
+                selectedOption.push({
+                    productId: productId,
+                    optionName: document.getElementById("option").value,
+                    optionValue: checkbox.value,
+                    stockQuantity: stockValue
+                });
+
+            });
+
+            if (selectedOption.length === 0) {
+                alert("Lütfen en az bir değer seçin.");
+                return;
+            }
+
+
+
+            fetch("/POT/AddPOT", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(selectedOption)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Ürün seçenekleri başarıyla eklendi!");
+                        location.reload();
+                    } else {
+                        alert("Bir hata oluştu: " + data.message);
+                    }
+
+                })
+                .catch(error => console.error("Hata:", error));
+        });
+
+    </script>
+
+</form>
+

@@ -1,0 +1,1523 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* ===== Colors ===== */
+    --body-color: #E4E9F7;
+    --sidebar-color: #FFF;
+    --primary-color: #695CFE;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-color: #707070;
+    /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.3s ease;
+    --tran-05: all 0.3s ease;
+    --color-primary: #7380ec;
+    --color-danger: #ff7782;
+    --color-success: #41f1b6;
+    --color-warning: #ffbb55;
+    --color-white: #fff;
+    --color-info-dark: #7d8da1;
+    --color-info-light: #dce1eb;
+    --color-dark: #363949;
+    --color-light: rgba(132, 139, 200, 0.18);
+    --color-primary-variant: #111e88;
+    --color-dark-variant: #677483;
+    --color-background: #f6f6f9;
+    --card-border-radius: 2rem;
+    --border-radius-1: 0.4rem;
+    --border-radius-2: 0.8rem;
+    --border-radius-3: 1.2rem;
+    --card-padding: 1.8rem;
+    --padding-1: 1.2rem;
+    --box-shadow: 0 1rem 2rem var(--color-light);
+    --linear-grad: linear-gradient(to right, #141E30, #243B55);
+    --grad-clr1: #141E30;
+    --grad-clr2: #243B55;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    position: absolute; /* Absolute yerine relative kullanarak, iç bileşenlerin konumunu etkilemeden ayarlayalım */
+    width: 100%;
+    height: 100%; /* Tam ekran yüksekliği */
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column; /* Dikey düzen */
+
+    background-color: #FAFAFA;
+}
+
+.header-ecom {
+    position: relative;
+    top: 0;
+    height: 5rem;
+    display: flex;
+    justify-content: space-around; /* Header içindeki öğeleri daha iyi hizala */
+    align-items: center;
+    background-color: #FFFFFF;
+    padding: 0 2rem; /* İçerikten boşluk bırak */
+}
+
+header .header-left-side {
+    display: flex;
+}
+
+    header .header-left-side i {
+        margin-right: .5rem;
+        font-size: 1.4rem;
+    }
+
+    header .header-left-side h4 {
+        font-size: 1rem;
+    }
+
+header .header-middle-side {
+    flex-direction: row;
+}
+
+    header .header-middle-side ul {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+        header .header-middle-side ul li {
+            list-style: none;
+            margin-left: 1rem;
+        }
+
+            header .header-middle-side ul li a {
+                text-decoration: none;
+                color: black;
+                position: relative;
+            }
+
+                header .header-middle-side ul li a::after {
+                    content: "";
+                    position: absolute;
+                    height: 2px;
+                    width: 0;
+                    bottom: 0;
+                    left: 0;
+                    background-color: black;
+                    transition: all 0.6s ease;
+                }
+
+                header .header-middle-side ul li a:hover::after {
+                    width: 100%;
+                }
+
+header .header-right-side {
+    margin-right: 4rem;
+}
+
+    header .header-right-side .icon-links {
+        display: flex;
+        width: 5rem;
+    }
+
+        header .header-right-side .icon-links ul {
+            display: flex;
+            justify-content: space-between;
+        }
+
+            header .header-right-side .icon-links ul li {
+                list-style: none;
+            }
+
+        header .header-right-side .icon-links a {
+            color: black;
+        }
+
+            header .header-right-side .icon-links a i {
+                font-size: 1.4rem;
+                margin-left: .7rem;
+            }
+
+            header .header-right-side .icon-links a:hover {
+                transition: all 0.3s ease;
+            }
+
+
+.main-ecom {
+    position: relative;
+    height: auto;
+    width: 100%;
+    flex: 1; /* Geri kalan alanı kapla */
+    display: flex; /* İçerikleri esnek düzen ile hizala */
+    flex-direction: column; /* Dikey düzenleme */
+    justify-content: start; /* dikey */
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.footer-ecom {
+    background-color: #E5EBFC;
+    position: relative;
+    width: 100%;
+    height: 5rem;
+    text-align: center; /* Metni ortala */
+    justify-content: center;
+    align-items: center;
+}
+
+/*Login*/
+/* Login Container */
+.login-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+    /* Sol ve Sa� K�s�mlar */
+    .login-container .login-left,
+    .login-container .login-right {
+        width: 50%; /* Her iki b�lgenin geni�li�i */
+        height: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute; /* Pozisyonlama i�in */
+        transition: transform 0.5s ease-in-out; /* Animasyon efekti */
+    }
+
+    /* Sol K�s�m (Ba�lang��ta g�r�n�r) */
+    .login-container .login-left {
+        transform: translateX(0); /* Ba�lang��ta solda */
+    }
+
+    /* Sa� K�s�m (Ba�lang��ta sa�da) */
+    .login-container .login-right {
+        transform: translateX(100%); /* Ba�lang��ta sa�da */
+    }
+
+#alert-login {
+    display: none;
+}
+
+.login-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.login-panel-image {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4rem;
+}
+
+    .login-panel-image img {
+        width: 200px;
+        height: 200px;
+    }
+/* Panel ve Buton */
+.panel {
+    background-color: #004AFA;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    top: 0;
+    z-index: 2; /* Panelin �stte g�r�nmesini sa�lar */
+    transform: translateX(100%);
+    overflow: hidden;
+}
+
+    /* Buton Stili */
+    .panel button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        /* Kayd�rma animasyonunu ekler */
+    }
+
+
+#login-button, #sign-up-button {
+    border-radius: 2rem;
+    background-color: transparent;
+    border: white solid 2px;
+}
+
+.show-sign-up {
+    transform: translateX(0); /* Sa� paneli sola kayd�r�r */
+    transition: transform 1s ease-in-out;
+    border-radius: 3rem;
+}
+
+/* Soldaki paneli sa�a kayd�r�r */
+.show-login {
+    transform: translateX(100%); /* Soldaki paneli sa�a kayd�r�r */
+    transition: transform 1s ease-in-out;
+    border-radius: 3rem;
+}
+
+
+
+/* Form Stili */
+.btn-login-forms {
+    font-weight: 100;
+    font-size: 1.3rem;
+    width: 20rem;
+    height: 3rem;
+    background-color: #004cff;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.btn-logout {
+    border: none;
+    width: 100%;
+}
+
+.input-field-login input {
+    border: none;
+    text-align: center;
+    border-radius: 2rem;
+    width: 20rem;
+    height: 3rem;
+    background-color: #f8f8f8;
+}
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 250px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    font-size: .8rem;
+    right: 10px; /* ��eri�i sola kayd�rmak i�in bu de�eri ayarlayabilirsiniz */
+}
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        background-color: #f9f9f9;
+        font-size: 1rem;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown .dropbtn i {
+    margin-left: 1rem;
+    color: black;
+    background-color: transparent;
+}
+
+    .dropdown .dropbtn i:hover {
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+.dropdown-content a {
+    display: flex;
+    margin-left: 0;
+}
+
+/* Produc...t Index*/
+.content {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+    .content .getCategory {
+        position: relative;
+        width: 25%;
+        height: auto;
+        background-color: rebeccapurple;
+        margin: 0 2rem 0 2rem;
+    }
+
+
+
+
+.product-container {
+    position: relative;
+    display: grid;
+    justify-content: space-around;
+    grid-template-columns: repeat(4,14rem); /* 4 s�tun */
+    grid-template-rows: repeat(2,22rem); /* 4 s�tun */
+    width: 75%;
+    height: 100%;
+    flex-wrap: wrap; /* Sat�r ba��na birden fazla kutu olmas�na izin verir */
+}
+
+
+.product-box {
+    position: relative;
+    background-color: white;
+    width: 200px; /* Her kutunun geni�li�i */
+    height: 300px; /* Her kutunun y�ksekli�i */
+    padding: 0; /* �� bo�lu�u s�f�rlar */
+    flex-direction: column; /* Dikey d�zenleme */
+    display: flex; /* Flexbox kullanarak i�eri�i hizalamak i�in */
+    align-items: center; /* Dikeyde ortalar */
+    justify-content: space-around; /* ��erikleri yukar�dan a�a��ya e�it aral�kla yerle�tirir */
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    border: solid 1px #e6e6e6;
+}
+
+    .product-box:hover {
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        box-shadow: none;
+    }
+
+.product-box-top {
+    position: relative;
+    width: 100%;
+    height: 50%;
+    border-radius: 5px;
+}
+
+    .product-box-top img {
+        /*margin-top: 1rem;*/
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+
+
+
+.product-box-middle {
+    position: relative;
+    display: flex;
+    align-items: start;
+    margin-top: 2rem;
+    justify-content: space-between;
+    width: 100%;
+    height: 10%;
+    border-radius: 5px;
+}
+
+    .product-box-middle span {
+        margin: 0 .4rem 0 .4rem;
+        font-size: 0.7rem;
+    }
+
+.bold-text {
+    margin: 0 .4rem 0 .4rem;
+    font-weight: 700;
+}
+
+.product-box-bottom {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+    width: 100%;
+    height: 40%;
+    border-radius: 5px;
+}
+
+    .product-box-bottom .product-info {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 70%;
+    }
+
+        .product-box-bottom .product-info span {
+            font-size: .8rem;
+            margin: 0 0 0 .5rem;
+        }
+
+        .product-box-bottom .product-info small {
+            font-size: .68rem;
+            margin: 0 0 0 .5rem;
+        }
+
+    .product-box-bottom .product-sale {
+        display: flex;
+        position: relative;
+        width: 100%;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 1rem;
+    }
+
+.btn-addToCart {
+    position: relative;
+    background-color: #E5EBFC;
+    color: black;
+    width: 100px;
+    height: 30px;
+    border-radius: .4rem;
+    padding: .4rem;
+    border: none;
+    font-size: .8rem;
+}
+
+.btn-addToWL {
+    position: relative;
+    background-color: #E5EBFC;
+    color: black;
+    border-radius: 50%;
+    border: none;
+    display: flex; /* Flexbox ile i�erik d�zeni */
+    align-items: center;
+    justify-content: center;
+    padding: .5rem; /* �� bo�luklar� s�f�rla */
+    overflow: hidden; /* Ta�malar� engelle */
+}
+
+
+
+#cart-table {
+    width: 80%;
+    justify-content: center;
+    align-content: center;
+}
+
+#cartItem {
+    padding: 1rem;
+    width: auto;
+    justify-content: center;
+    align-content: center;
+}
+
+.product-cart-img {
+    width: 50px;
+    height: 50px;
+}
+
+#alertMessage {
+    position: relative;
+    margin: 2rem;
+}
+
+
+
+
+.cart-content {
+    margin-top: 1rem;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    background-color: white;
+    padding: 1rem; /* �� bo�lu�u s�f�rlar */
+    border-radius: 5px;
+    border: solid 1px #e6e6e6;
+}
+
+    .cart-content .cc-left {
+        position: relative;
+        display: flex;
+    }
+
+        .cart-content .cc-left img {
+            margin-right: 1rem;
+            height: 70px;
+            width: 70px;
+        }
+
+.cc-left-text {
+    margin-left: 2rem;
+}
+
+.cart-content .cc-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .cart-content .cc-right span {
+        margin-right: 1rem;
+    }
+/* Toast Notification*/
+#toastBox {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    align-items: center;
+    flex-direction: row;
+    overflow: hidden;
+    width: 400px;
+    height: 80px;
+    z-index: 9999;
+}
+
+.toast {
+    width: 400px;
+    height: 80px;
+    display: flex;
+    align-items: center; /* Dikey ortalama */
+    gap: 3px; /* İkon ile yazı arasında boşluk */
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    font-weight: bold;
+    animation: slideIn 0.3s ease forwards;
+    min-width: 250px;
+}
+
+    .toast i {
+        font-size: 2rem;
+        margin:0 1rem 0 1rem; /* İkon ile yazı arasında boşluk */
+        color: green;
+        flex-shrink: 0; /* İkonun küçülmesini engelle */
+    }
+
+    .toast.error i {
+        color: red;
+    }
+
+    .toast.invalid i {
+        color: orange;
+    }
+
+    .toast span {
+        flex: 1; /* Yazının kalan alanı kaplamasını sağlar */
+    }
+
+    .toast::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 5px;
+        background: green;
+        animation: anim 5s linear forwards;
+        border-radius: 0 0 5px 5px;
+    }
+
+@keyframes anim {
+    100% {
+        width: 0;
+    }
+}
+
+.toast.error::after {
+    background: red;
+}
+
+.toast.invalid::after {
+    background: orange;
+}
+
+
+
+/*Profile Container */
+.profile-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+}
+
+.profile-container-left {
+    position: relative;
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.box {
+    position: relative;
+    background-color: white;
+    width: 90%; /* Her kutunun geni�li�i */
+    padding: 0; /* �� bo�lu�u s�f�rlar */
+    flex-direction: column; /* Dikey d�zenleme */
+    display: flex; /* Flexbox kullanarak i�eri�i hizalamak i�in */
+    border-radius: 5px;
+    border: solid 1px #e6e6e6;
+}
+
+    .box:hover {
+        cursor: pointer;
+    }
+
+.profile-name {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+    .profile-name span {
+        padding: .5rem;
+    }
+
+.profile-my_order {
+    position: relative;
+    justify-content: start;
+    align-items: start;
+    margin-top: 1rem;
+}
+
+    .profile-my_order span {
+        margin: 1rem 0 0 1rem;
+    }
+
+    .profile-my_order a {
+        margin: .1rem .4rem .4rem .4rem;
+        font-size: .8rem;
+        width: 90%;
+        height: 2.5rem; /* Increase height for better clickable area */
+        line-height: 2.5rem; /* Vertically center text */
+        border-radius: 4px; /* Rounded corners for buttons */
+        transition: background-color 0.3s; /* Smooth transition for hover effect */
+    }
+
+        .profile-my_order a:hover, .profile-active {
+            background-color: blue;
+            opacity: 0.5;
+            color: #E5EBFC;
+            transition: 1s; /* Smooth transition for hover effect */
+        }
+
+        .profile-my_order a i {
+            margin: 0 .4rem 0 .4rem;
+        }
+
+
+
+.profile-container-right {
+    position: relative;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.profile-info {
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    height: 10%;
+    margin-bottom: 2rem;
+}
+
+.profile-info-bottom {
+    margin-top: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+}
+
+.vr {
+    border: none;
+    border-left: 1px solid black;
+    height: 100%;
+    width: 1px;
+}
+
+.profile-info-bottom .profile-info-bottom-left,
+.profile-info-bottom .profile-info-bottom-right {
+    position: relative;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    width: 50%;
+    height: auto;
+}
+
+.profile-info-bottom .profile-info-bottom-left {
+    flex-direction: column;
+}
+
+    .profile-info-bottom .profile-info-bottom-left form, .profile-info-bottom .profile-info-bottom-right form {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+.profile-info-bottom-left-name {
+    font-size: 1.3rem;
+    color: crimson;
+    padding: .4rem 0 .2rem 1rem;
+}
+
+.profile-info-bottom-left-input {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 1rem;
+}
+
+.profile-info-bottom-left-input-bottom {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+}
+
+.profile-info-bottom-left-input-top {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.space {
+    width: 1rem;
+}
+
+.t-input {
+    position: relative;
+    height: 2.5rem;
+    text-align: start;
+    padding: .4rem;
+    width: 100%;
+    background-color: #FBFBFB;
+}
+
+.profile-info-bottom .profile-info-bottom-right {
+}
+
+.profile-info span {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 1rem;
+}
+
+
+
+.addressList {
+    position: absolute;
+    display: flex;
+    width: 100%;
+}
+
+.addressCart {
+    position: relative;
+    width: 400px;
+    height: 250px;
+    margin-right: 1rem;
+}
+
+    .addressCart .aTop {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 20%;
+    }
+
+        .addressCart .aTop input {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .addressCart .aTop span {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+    .addressCart .aBottom {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        width: 100%;
+        height: 80%;
+    }
+
+        .addressCart .aBottom .aBottom-top {
+            position: relative;
+            display: flex;
+            width: 100%;
+            height: 60%;
+            flex-direction: column;
+        }
+
+        .addressCart .aBottom span {
+            position: relative;
+            margin-left: 1rem;
+        }
+
+        .addressCart .aBottom .aBottom-bottom {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            width: 100%;
+            height: 40%;
+            align-items: center;
+        }
+
+#saveBtn {
+    position: relative;
+    margin-top: -1.2rem;
+}
+
+
+/*Profile Container */
+
+
+
+/* purchase */
+
+.purchase {
+    display: flex;
+    width: 100%;
+    height: auto;
+    padding: 2rem;
+}
+
+.purchase-left {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 50%;
+    height: 40rem;
+    margin-right: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.purchase-btn {
+    margin-top: 1rem;
+    color: #fff;
+    padding: 1rem;
+    border: 1px solid #fff;
+    overflow: hidden;
+}
+
+
+    .purchase-btn:hover {
+        background-color: #fff;
+        color: black;
+        transition: all .3s ease-in-out;
+        cursor: pointer;
+    }
+
+.purchase-mid,
+.purchase-right {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 25%;
+    height: 40rem;
+    margin-right: 2rem;
+}
+
+.p-women, .p-kid, .p-men, .p-acs {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    background-color: rebeccapurple;
+    width: 100%;
+    height: 50%;
+    justify-content: center;
+    align-items: center;
+}
+
+.purchase-mid .p-women, .p-men {
+    margin-bottom: 2rem;
+}
+
+.mens-lastest {
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+    .mens-lastest .ml-product {
+        display: flex;
+        flex-direction: column;
+    }
+
+.ml-content {
+    display: flex;
+}
+
+.p-content {
+    width: 75%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ml-product-box, .p-product-box {
+    position: relative;
+    display: flex;
+    width: 20rem;
+    height: 20rem;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+    margin: 2rem 2rem 1rem 0;
+    background-size: cover; /* Resmin kutuyu tamamen kaplamasını sağla */
+    background-position: center; /* Ortalamak için */
+}
+
+    .ml-product-box:hover, .p-product-box:hover .pb-btn {
+        transform: translateY(0);
+        cursor: pointer;
+    }
+
+
+
+
+
+
+.pb-btn {
+    display: flex;
+    margin: 1rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: .2rem;
+    background-color: #F2F9FF;
+    color: black;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(6rem);
+    transition: transform 0.5s ease-in-out; /* Geçiş efekti */
+}
+
+
+    .pb-btn:hover {
+        color: black;
+        cursor: pointer;
+    }
+
+    .pb-btn i {
+        font-size: 1.5rem;
+    }
+
+
+
+
+/*   PRODUCT DETAIL */
+
+
+
+
+
+
+li {
+    list-style: none;
+}
+
+.pd-content {
+    display: flex;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.pd-img {
+    width: 50%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .pd-img .pdi-btn {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        width: 1rem;
+        height: 1rem;
+        margin: 1rem 0 0 5px;
+    }
+
+    .pd-img .pd-img-img {
+        position: relative;
+        width: 100%; /* Resmin genişliği %100 yapıldı, böylece daha esnek olacak */
+        height: 30rem; /* Yükseklik sabitlendi */
+        object-fit: contain; /* Resmin boyutunu kutuya sığdırmak için "contain" kullanıldı */
+    }
+
+.pd-right {
+    width: 50%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+    .pd-right h4 {
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .pd-right .price {
+        font-size: 18px;
+        font-weight: bold;
+        color: #555;
+    }
+
+.stars {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+    display: flex;
+}
+
+    .stars li {
+        color: #FFD700; /* Altın sarısı yıldız */
+        margin-right: 5px;
+        font-size: 16px;
+    }
+
+.quote {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    font-style: italic;
+    color: #333;
+}
+
+    .quote i {
+        font-size: 24px;
+        margin-right: 10px;
+        color: #555;
+    }
+
+.quantity-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+}
+
+    .quantity input {
+        width: 40px;
+        text-align: center;
+        border: 1px solid #ccc;
+        padding: 5px;
+    }
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+    .total h4 {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+
+
+
+checkbox-wrapper-16 *,
+.checkbox-wrapper-16 *:after,
+.checkbox-wrapper-16 *:before {
+    box-sizing: border-box;
+}
+
+.checkbox-wrapper-16 .checkbox-input {
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(100%);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+    .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile {
+        border-color: #2260ff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        color: #fff;
+    }
+
+        .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile:before {
+            transform: scale(1);
+            opacity: 1;
+            background-color: #2260ff;
+            border-color: #2260ff;
+            color: #fff;
+            content: "✓";
+        }
+
+        .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile .checkbox-icon,
+        .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile .checkbox-label {
+            color: black;
+        }
+
+    .checkbox-wrapper-16 .checkbox-input:focus + .checkbox-tile {
+        border-color: #2260ff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
+    }
+
+        .checkbox-wrapper-16 .checkbox-input:focus + .checkbox-tile:before {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+.checkbox-wrapper-16 .checkbox-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    min-height: 3rem;
+    border-radius: 0.5rem;
+    border: 2px solid #b5bfd9;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.15s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+    .checkbox-wrapper-16 .checkbox-tile:before {
+        content: "";
+        font-size: 12px;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: .8rem;
+        height: .8rem;
+        border: 2px solid #b5bfd9;
+        border-radius: 50%;
+        top: 0.25rem;
+        left: 0.25rem;
+        opacity: 0;
+        transform: scale(0);
+        transition: 0.25s ease;
+    }
+
+    .checkbox-wrapper-16 .checkbox-tile:hover {
+        border-color: #fff;
+    }
+
+        .checkbox-wrapper-16 .checkbox-tile:hover:before {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+.checkbox-wrapper-16 .checkbox-label {
+    color: #707070;
+    transition: 0.375s ease;
+    text-align: center;
+}
+
+
+/* Credit Card */
+
+.credit-card {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+}
+
+
+.flip-card {
+    background-color: transparent;
+    width: 25rem;
+    height: 15rem;
+    perspective: 1000px;
+    color: white;
+    margin-right: 2rem;
+}
+
+.heading_8264 {
+    position: absolute;
+    letter-spacing: .2em;
+    font-size: .8em;
+    top: 1em;
+    left: 21em;
+}
+
+.logo {
+    position: absolute;
+    top: 10em;
+    left: 18em;
+}
+
+.chip {
+    position: absolute;
+    top: 2em;
+    left: 1.5em;
+}
+
+.contactless {
+    position: absolute;
+    top: 3.5em;
+    left: 22em;
+}
+
+.number {
+    position: absolute;
+    font-weight: bold;
+    font-size: .9em;
+    top: 7.3em;
+    left: 1.6em;
+}
+
+.valid_thru {
+    position: absolute;
+    font-weight: bold;
+    top: 14em;
+    font-size: .7em;
+    left: 1em;
+}
+
+.date_8264 {
+    position: absolute;
+    font-weight: bold;
+    font-size: 1em;
+    top: 10em;
+    left: 4em;
+}
+
+.name {
+    position: absolute;
+    font-weight: bold;
+    font-size: 1rem;
+    top: 12.1em;
+    left: 2em;
+}
+
+.strip {
+    position: absolute;
+    background-color: black;
+    width: 100%;
+    height: 1.5em;
+    top: 2.4em;
+    background: repeating-linear-gradient( 45deg, #303030, #303030 10px, #202020 10px, #202020 20px );
+}
+
+.mstrip {
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    width: 8em;
+    height: 0.8em;
+    top: 5em;
+    left: .8em;
+    border-radius: 2.5px;
+}
+
+.sstrip {
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    width: 4.1em;
+    height: 0.8em;
+    top: 5em;
+    left: 10em;
+    border-radius: 2.5px;
+}
+
+.code {
+    font-weight: bold;
+    text-align: center;
+    margin: .2em;
+    color: black;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    box-shadow: 0 8px 14px 0 rgba(0,0,0,0.2);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 1rem;
+}
+
+.flip-card-front {
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+    background-color: #171717;
+}
+
+.flip-card-back {
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+    background-color: #171717;
+    transform: rotateY(180deg);
+}
+
+/*Payment Content*/
+
+
+.payment-content {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    display: flex;
+}
+
+    .payment-content .payment-adress, .payment-ccard {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 35%;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+.payment-acc-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 80%;
+    margin-top: 1rem;
+}
+
+.adress-box {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment-cc {
+    width: 100%;
+    height: 13rem;
+    margin-top: 2rem;
+}
+
+
+.payment-content .payment-cartitem {
+    position: relative;
+    display: flex;
+    width: 30%;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.payment-content .payment-topbar {
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*All My Orders */
+
+.allMyOrders {
+    position: absolute;
+}
+
+    .allMyOrders .amo-top, .amo-bottom {
+        display: flex;
+        height: 5rem;
+        background-color: #fff;
+        width: 100%;
+        justify-content: space-between;
+        border: 1px solid #e6e6e6;
+        padding: 1rem;
+    }
+.amo-bottom-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+/*alertbox*/
+
+.alert-box {
+    width: 100%;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+
+
+
+
+
+

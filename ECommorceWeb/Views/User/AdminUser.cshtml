@@ -1,0 +1,76 @@
+﻿@model AUListViewModel
+
+
+@{
+    Layout = "_AdminLayout";
+}
+
+
+<h2>User </h2>
+<table class="table table-bordered" id ="admin-table" style="max-width:90%;">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Name</td>
+            <td>LastName</td>
+            <td>UserName</td>
+            <td>Email</td>
+            <td>PPURL</td>
+            <td>PhoneNumber</td>
+            <td>IsActive</td>
+            <td>IsAdmin</td>
+            <td>Gender</td>
+            <td>CreatedAt</td>
+            <td>LastLogin</td>
+            <th scope="col">OPTION </th>
+        </tr>
+    </thead>
+    @foreach (var user in Model.ListUser)
+    {
+        <tbody>
+            <tr>
+                <td>@user.ApplicationUserId</td>
+                <td>@user.Name</td>
+                <td>@user.LastName</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td><img class="product-admin-img" src="@user.ProfilePictureUrl" /></td>
+                <td>@user.PhoneNumber</td>
+                @if (user.IsActive == true)
+                {
+                    <td> <i class="fa-solid fa-check"></i></td>
+                }
+                else
+                {
+                    <td>
+                       
+                            <i class="fa-solid fa-close"></i>
+                       
+                    </td>
+                }
+                <td>@user.IsAdmin</td>
+                <td>@user.Gender</td>
+                <td> @(user.CreatedAt.HasValue ? user.CreatedAt.Value.ToString("dd.MM.yyyy") : "Tarih Yok")</td>
+                <td> @(user.LastLogin.HasValue ? user.LastLogin.Value.ToString("dd.MM.yyyy") : "Tarih Yok")</td>
+                <td style="display:flex;">
+                    <a style="margin-right:.4rem;" class="btn btn-outline-warning" asp-controller="User" asp-action="UpdateUser" asp-route-productId="@user.ApplicationUserId"><i class='bx bx-edit-alt'></i></a>
+                
+                    <form method="post" asp-controller="User" asp-action="DeleteUser" onsubmit="return confirmDelete();">
+                        <input type="hidden" name="ApplicationUserId" value="@user.ApplicationUserId" />
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class='bx bx-x'></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+<a class="btn btn-outline-primary" asp-controller="User" asp-action="AddUser"> <i class='bx bx-add-to-queue'></i>ADD USER</a>
+
+<script>
+    function confirmDelete() {
+        return confirm('Bu ürünü silmek istediğinize emin misiniz?'); // Kullanıcıdan onay al
+    }
+</script>
