@@ -106,10 +106,6 @@ namespace ECommorceWeb.Controllers
 
             }
 
-
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-
             if (string.IsNullOrEmpty(userId))
             {
                 return RedirectToAction("Index", "Login");
