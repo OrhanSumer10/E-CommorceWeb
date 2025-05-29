@@ -20,9 +20,9 @@
         </tr>
     </thead>
     <tbody>
-
-
-
+        
+           
+        
         @foreach (var item in Model.reviews)
         {
             var user = Model.apUsers.FirstOrDefault(x => x.ApplicationUserId == item.UserId);

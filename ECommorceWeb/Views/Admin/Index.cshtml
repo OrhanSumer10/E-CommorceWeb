@@ -3,6 +3,8 @@
     Layout = "_AdminLayout";
 }
 
+
+
 <div class="acr-bottom-top">
     <div class="ad-box">
         <div class="ad-box-left"><i class='bx bxs-component'></i></div>
@@ -33,7 +35,9 @@
         </div>
     </div>
 </div>
-
+<div class="acr-bottom-bottom">
+    <div class="acr-bottom-left">
+        
 <div class="acr-bottom-bottom row mt-4">
     <!-- Sol taraf: Grafik veya istatistik -->
     <div class="acr-bottom-left col-md-8">
@@ -63,7 +67,7 @@
                     <div>
                         <small style="font-weight:bold;">@($"{user?.Name} {user?.LastName}")</small><br />
                         <small style="font-size:.6rem;">@order.ReviewDate.ToString("dd.MMMM.yyyy")</small>
-                    </div>
+        </div>
                     <div>
                         <small style="font-size:.8rem;">@shortReview</small><br />
                         <small>
@@ -85,7 +89,7 @@
                                 }
                             </ul>
                         </small>
-                    </div>
+        </div>
                 </li>
                 <br />
             }

@@ -112,7 +112,7 @@
                                 }
                             </select>
                         </form>
-
+                      
                     </td>
                     <td>@(item.Payment != null ? item.Payment.ToString() : "Ödeme bilgisi yok")</td> <!-- Ödeme bilgisi -->
                     <td>
@@ -130,6 +130,7 @@
                         }
                     </td>
                     <td>
+                        <button class="btn btn-dark"> <i class="fa-solid fa-edit"></i></button>
                         <form action="/Order/ODelete" method="post" style="display:inline;">
                             <input type="hidden" name="orderId" value="@item.OrderId" />
                             <button id="orderDbtn" type="submit" class="btn btn-danger">

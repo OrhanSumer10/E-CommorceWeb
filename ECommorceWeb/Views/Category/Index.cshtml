@@ -23,7 +23,7 @@
                 <td>@product.CategoryId</td>
                 <td>@product.Name</td>
                 <td>@product.Description</td>
-
+          
                 <td><a class="btn btn-outline-warning" asp-controller="Category" asp-action="UpdateCategory" asp-route-categoryId="@product.CategoryId"><i class='bx bx-edit-alt'></i></a></td>
                 <td>
                     <form method="post" asp-controller="Category" asp-action="DeleteCategory">
@@ -57,7 +57,7 @@
                 },
                 function () {
                     showToastAndSave('Silme İşlemi İptal Edildi.', 'error')
-                }
+    }
 
             );
         });

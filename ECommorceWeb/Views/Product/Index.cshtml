@@ -3,6 +3,9 @@
 @{
     Layout = "_Layout";
 }
+<div id="toastBox" class="toast" style="display:none;">
+    @TempData["Message"]
+</div>
 
 
 <div style="width:50%; display:flex; gap:1rem;">
@@ -15,19 +18,20 @@
         <option value="price-asc">Fiyata Göre (Ucuzdan Pahalıya)</option>
         <option value="price-desc">Fiyata Göre (Pahalıdan Ucuza)</option>
     </select>
-</div>
+    </div>
 <div class="p-content">
     @{
         List<CouponProduct> couponProducts = Model.couponProducts != null
 
         ? Model.couponProducts
         : new List<CouponProduct>();
+
         List<Coupon> coupons = Model.coupons != null
         ? Model.coupons
         : new List<Coupon>();
     }
 
-
+    
     @foreach (var product in Model.Products)
     {
         var matchingCouponProduct = couponProducts.FirstOrDefault(cp => cp.ProductId == product.ProductId);
@@ -41,7 +45,7 @@
         }
 
         @* İndirim etiketi *@
-
+       
         <div class="ml-product" data-name="@product.Name.ToLower()" data-price="@product.Price">
             <div class="p-product-box" style="background-image:url('@imgurl'); width:15rem; height:15rem;">
 
@@ -52,7 +56,7 @@
                         %@matchedCoupon.Discount.ToString("F0") İndirim
                     </div>
                 }
-
+                
                 <form action="@Url.Action("ProductDetail", "Product")">
                     <input type="hidden" name="ProductId" value="@product.ProductId" />
                     <button class="pb-btn" type="submit" style="border:none;width:3rem; height:3rem;">
@@ -65,9 +69,9 @@
                         <i class="fa-regular fa-heart"></i>
                     </button>
                 </form>
-
+              
             </div>
-
+         
             <h4 style="font-weight:700;">@product.Name</h4>
             <h6 class="text-muted">@product.Price ₺</h6>
         </div>
@@ -75,7 +79,7 @@
 
 </div>
 
-<script>
+    <script>
     const searchInput = document.getElementById("searchInput");
     const sortSelect = document.getElementById("sortSelect");
     const productItems = document.querySelectorAll(".ml-product");
@@ -101,14 +105,16 @@
             filtered.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price));
         } else if (sortValue === "price-desc") {
             filtered.sort((a, b) => parseFloat(b.dataset.price) - parseFloat(a.dataset.price));
-        }
+            }
 
         // 3. Ekranı güncelle
         const container = document.querySelector(".p-content");
         container.innerHTML = ""; // Önce boşalt
         filtered.forEach(p => container.appendChild(p)); // Sıralı şekilde tekrar ekle
-    }
+        }
 
     searchInput.addEventListener("input", filterAndSort);
     sortSelect.addEventListener("change", filterAndSort);
-</script>
+    </script>
+} *@
+

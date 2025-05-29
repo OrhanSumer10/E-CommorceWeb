@@ -33,8 +33,9 @@
                             </a>
                             <form method="post" asp-controller="ProductReview" asp-action="MyReviewDelete" asp-route-reviewId="@item.ProductReviewId">
                                 <button type="submit" class="btn btn-outline-danger" id="deleteReview">
-                                    <span style="font-size:10px;"> <i class="fa-solid fa-trash"></i> Yorumu Sil</span>
-                                </button>
+                                <span style="font-size:10px;"> <i class="fa-solid fa-trash"></i> Yorumu Sil</span>
+
+                            </button>
 
                             </form>
 
@@ -64,26 +65,26 @@
                     console.log("Silme iptal edildi.");
                 }
             );
-        });
+    });
 
 
 
-        function renderStars(rating) {
-            const fullStar = '★';
-            const emptyStar = '☆';
-            const totalStars = 5;
-            let stars = '';
+    function renderStars(rating) {
+        const fullStar = '★';
+        const emptyStar = '☆';
+        const totalStars = 5;
+        let stars = '';
 
-            for (let i = 1; i <= totalStars; i++) {
-                stars += i <= rating ? fullStar : emptyStar;
-            }
-
-            return stars;
+        for (let i = 1; i <= totalStars; i++) {
+            stars += i <= rating ? fullStar : emptyStar;
         }
 
-        document.querySelectorAll('.ratingStars').forEach(el => {
-            const rating = parseInt(el.dataset.rating);
-            el.innerText = renderStars(rating);
-        });
+        return stars;
+    }
+
+    document.querySelectorAll('.ratingStars').forEach(el => {
+        const rating = parseInt(el.dataset.rating);
+        el.innerText = renderStars(rating);
+    });
     });
 </script>

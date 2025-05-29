@@ -27,7 +27,7 @@ namespace ECommorceWeb.Controllers
             _adresdal = adresdal;
             _pidal = pidal;
             _productDal = productDal;
-
+      
         }
 
         public IActionResult Index()
@@ -163,7 +163,7 @@ namespace ECommorceWeb.Controllers
 
 
         [HttpPost]
-        public IActionResult ODelete(int orderId)
+        public IActionResult ODelete(int orderId) 
         {
             try
             {

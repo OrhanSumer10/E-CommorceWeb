@@ -59,7 +59,7 @@ namespace ECommorceWeb.Controllers
             {
                 return RedirectToAction("Index", "Cart");
             }
-
+         
         }
 
 
@@ -79,30 +79,35 @@ namespace ECommorceWeb.Controllers
                 {
                     TempData["ErrorMessage"] = "Sepetinizde ödeme yapılmamış ürün bulunmamaktadır.";
                     return RedirectToAction("Profile", "User");
-                }
-
+                            }
+                          
                 // Yeni siparişi oluştur
-                var newOrder = new Order
-                {
+                            var newOrder = new Order
+                            {
                     UserId = order.UserId,
-                    OrderDate = DateTime.Now,
+                                OrderDate = DateTime.Now,
                     cartitemId = order.cartitemId,
                     
                     Status = Order.OrderStatus.Pending,
                     Payment = Order.PaymentType.Online
-                };
+                            };
 
                 _orderdal.Add(newOrder); // Kaydet, böylece OrderId oluşacak
 
                 // CartItem'ları güncelle, OrderId ata ve isPaid true yap
                 foreach (var item in cartItems)
-                {
+                    {
                     item.OrderId = newOrder.OrderId;  // Order ile ilişkilendir
                     item.isPaid = true;
                     _cidal.Update(item);
-                }
+                    }
 
-                TempData["Message"] = "Sipariş başarıyla oluşturuldu.";
+                    TempData["Message"] = "Sipariş başarıyla oluşturuldu.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Sepetinizde ödeme yapılmamış ürün bulunmamaktadır.";
+                }
             }
             catch (Exception ex)
             {

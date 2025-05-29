@@ -42,7 +42,7 @@
         }
     </div>
     <div class="pd-right">
-
+      
         <h4>@Model.Product.Name</h4>
         <!-- Yıldızların Razor ile Dinamik Gösterimi -->
         @{
@@ -178,6 +178,7 @@
     @await Component.InvokeAsync("Review", new { productId = Model.Product.ProductId })
 </div>
 
+
 <script>
 
 
@@ -263,6 +264,7 @@
             document.getElementById("SelectedValue").value = selectedOption.value;
             document.getElementById("SelectedPrice").value = (parseFloat(selectedOption.dataset.additionalprice) || 0) + parseFloat(productPrice) * inputField.value;
             document.getElementById("SelectedQuantity").value = inputField.value;
+
         });
 
         function updateStockAndPrice() {

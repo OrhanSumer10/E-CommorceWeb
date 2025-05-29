@@ -163,6 +163,17 @@ justify-content:space-between;
                             <span style="font-weight:bold; font-size:8px;">Adet : @product.SelectedQuantity</span>
                         </div>
                     </div>
+
+          
+
+                    <div class="cc-right">
+                        <form method="post" asp-controller="Cart" asp-action="RemoveFromCart">
+                            <input type="hidden" name="cartItemId" value="@product.CartItemId" />
+                            <button type="submit" class="btn btn-danger">
+                                <i class='fa-solid fa-trash'></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             }
 

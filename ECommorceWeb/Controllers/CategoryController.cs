@@ -91,7 +91,7 @@ namespace ECommorceWeb.Controllers
                 category = category
             };
 
-
+         
             return View(model);
         }
 
@@ -100,7 +100,7 @@ namespace ECommorceWeb.Controllers
         public IActionResult UpdateCategory(Category category)
         {
             _categoryService.Update(category);
-            try
+            try 
             {
                 TempData["Message"] = "Kategori başarıyla Güncellendi.";
                 return RedirectToAction("Index", "Category");
@@ -110,7 +110,7 @@ namespace ECommorceWeb.Controllers
                 TempData["ErrorMessage"] = "Kategori Güncellenemedi.";
                 return BadRequest("Hata :  " + ex.Message);
             }
-
+         
         }
 
     }

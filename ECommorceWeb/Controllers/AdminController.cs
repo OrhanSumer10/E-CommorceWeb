@@ -14,7 +14,7 @@ namespace ECommorceWeb.Controllers
         IGenericDal<ApUser> _userService;
         IGenericDal<CartItem> _cartService;
         IGenericDal<ProductReview> _prService;
-
+        
         public AdminController(IGenericDal<Product> productService, IGenericDal<ProductReview> prService, IGenericDal<CartItem> cartService, IGenericDal<Order> orderService, IGenericDal<ApUser> userService)
         {
             _orderService = orderService;

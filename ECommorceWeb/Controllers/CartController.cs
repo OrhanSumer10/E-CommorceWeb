@@ -83,6 +83,11 @@ namespace ECommorceWeb.Controllers
         [HttpPost]
         public IActionResult AddToCart(int productId, int userCouponId, string selectedValue, decimal selectedPrice, int selectedQuantity)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
 
 
             var pot = _potService.Get(x => x.ProductId == productId && x.OptionValue == selectedValue);
@@ -126,7 +131,7 @@ namespace ECommorceWeb.Controllers
                 };
 
                 
-                    _cartService.Add(newCartItem);
+                _cartService.Add(newCartItem);
                     TempData["alert"] = "Başarıyla Sepete Eklendi.";
                     TempData["alertType"] = "success";
                
