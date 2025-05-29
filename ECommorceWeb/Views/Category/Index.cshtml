@@ -23,12 +23,12 @@
                 <td>@product.CategoryId</td>
                 <td>@product.Name</td>
                 <td>@product.Description</td>
-          
+
                 <td><a class="btn btn-outline-warning" asp-controller="Category" asp-action="UpdateCategory" asp-route-categoryId="@product.CategoryId"><i class='bx bx-edit-alt'></i></a></td>
                 <td>
-                    <form method="post" asp-controller="Category" asp-action="DeleteCategory" onsubmit="return confirmDelete();">
+                    <form method="post" asp-controller="Category" asp-action="DeleteCategory">
                         <input type="hidden" name="categoryId" value="@product.CategoryId" />
-                        <button type="submit" class="btn btn-outline-danger">
+                        <button id="categoryDeleteBtn" type="submit" class="btn btn-outline-danger">
                             <i class='bx bx-x'></i>
                         </button>
                     </form>
@@ -41,7 +41,25 @@
 <a class="btn btn-outline-primary" asp-controller="Category" asp-action="AddCategory"> <i class='bx bx-add-to-queue'></i>ADD CATEGORY</a>
 
 <script>
-    function confirmDelete() {
-        return confirm('Bu ürünü silmek istediğinize emin misiniz?'); // Kullanıcıdan onay al
-    }
+    document.querySelectorAll("#categoryDeleteBtn").forEach(function (btn) {
+
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const form = this.closest("form"); // yakınındaki formu bulduk id ilede bulabilriiz.
+
+            confirmDialog(
+                "Bu Kategoriyi Silmek Üzeresiniz",
+                "Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
+                function () {
+                    form.submit(); // Onay verildiyse formu gönder
+                    showToastAndSave('Silme İşlemi Başarılı.', 'success')
+                },
+                function () {
+                    showToastAndSave('Silme İşlemi İptal Edildi.', 'error')
+                }
+
+            );
+        });
+    });
 </script>

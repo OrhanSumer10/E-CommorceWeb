@@ -20,7 +20,7 @@ namespace ECommorceWeb.Controllers
         IGenericDal<ProductImages> _productImgdal;
 
 
-        public PaymentController(IGenericDal<ProductImages> productImgdal,IGenericDal<Product> productdal,IGenericDal<Address> adresdal, IGenericDal<CreditCard> ccdal, IGenericDal<CartItem> cidal, IGenericDal<ApUser> userdal, IGenericDal<Order> orderdal)
+        public PaymentController(IGenericDal<ProductImages> productImgdal, IGenericDal<Product> productdal, IGenericDal<Address> adresdal, IGenericDal<CreditCard> ccdal, IGenericDal<CartItem> cidal, IGenericDal<ApUser> userdal, IGenericDal<Order> orderdal)
         {
             _adresdal = adresdal;
             _ccdal = ccdal;
@@ -57,15 +57,15 @@ namespace ECommorceWeb.Controllers
             }
             else
             {
-                return RedirectToAction("Index","Cart");
+                return RedirectToAction("Index", "Cart");
             }
-         
+
         }
 
 
 
         [HttpPost]
-        public IActionResult addOrder()
+        public IActionResult addOrder(Order order)
         {
             try
             {
@@ -75,48 +75,34 @@ namespace ECommorceWeb.Controllers
                 // Kullanıcının sepetindeki ödeme yapılmamış ürünleri al
                 var cartItems = _cidal.GetList(x => x.ApplicationUserId == parsedUserId && !x.isPaid).ToList();
 
-          
-
-                if (cartItems.Any()) // Eğer sepet boş değilse sipariş oluştur
-                {
-                    try
-                    {
-                        // 1️⃣ Sepetteki ödeme yapılmamış ürünlerin ID'lerini al
-                        foreach (var item in cartItems)
-                        {
-                            bool sd = item.isPaid;
-                            if (item.isPaid == false)
-                            {
-                                item.isPaid = true;
-                              
-                                _cidal.Update(item);
-                            }
-                          
-                            // Yeni sipariş oluştur
-                            var newOrder = new Order
-                            {
-                                UserId = parsedUserId,
-                                cartitemId = item.CartItemId, // Sepetteki ürünün ID’si
-                                OrderDate = DateTime.Now,
-                                Status = Order.OrderStatus.Pending, // Örnek: Yeni siparişin durumu
-                                Payment = Order.PaymentType.Online // Örnek: Ödeme durumu
-                            };
-                            _orderdal.Add(newOrder); // Siparişi veritabanına ekle
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        TempData["ErrorMessage"] = "Sipariş oluşturulamadı: " + ex.Message;
-                        return RedirectToAction("Profile", "User");
-                    }
-
-                    TempData["Message"] = "Sipariş başarıyla oluşturuldu.";
-                }
-                else
+                if (!cartItems.Any())
                 {
                     TempData["ErrorMessage"] = "Sepetinizde ödeme yapılmamış ürün bulunmamaktadır.";
+                    return RedirectToAction("Profile", "User");
                 }
+
+                // Yeni siparişi oluştur
+                var newOrder = new Order
+                {
+                    UserId = order.UserId,
+                    OrderDate = DateTime.Now,
+                    cartitemId = order.cartitemId,
+                    
+                    Status = Order.OrderStatus.Pending,
+                    Payment = Order.PaymentType.Online
+                };
+
+                _orderdal.Add(newOrder); // Kaydet, böylece OrderId oluşacak
+
+                // CartItem'ları güncelle, OrderId ata ve isPaid true yap
+                foreach (var item in cartItems)
+                {
+                    item.OrderId = newOrder.OrderId;  // Order ile ilişkilendir
+                    item.isPaid = true;
+                    _cidal.Update(item);
+                }
+
+                TempData["Message"] = "Sipariş başarıyla oluşturuldu.";
             }
             catch (Exception ex)
             {
@@ -125,5 +111,6 @@ namespace ECommorceWeb.Controllers
 
             return RedirectToAction("Profile", "User");
         }
+
     }
 }

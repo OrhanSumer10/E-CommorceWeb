@@ -131,5 +131,21 @@ namespace ECommorceWeb.Controllers
 
 
 
+
+        [HttpPost]
+
+        public IActionResult DeleteUser(int ApplicationUserId)
+        {
+            var user = _applicationuserService.Get(x=>x.ApplicationUserId == ApplicationUserId);
+            try
+            {
+                _applicationuserService.Delete(user);
+                return RedirectToAction("AdminUser","User");
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

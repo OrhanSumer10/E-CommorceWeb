@@ -1,0 +1,75 @@
+﻿
+
+<style>
+    .faq-container {
+        max-width: 90%;
+        margin: auto;
+    }
+
+    .faq-item {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        transition: box-shadow 0.2s;
+    }
+
+    .faq-question {
+        padding: 1rem;
+        cursor: pointer;
+        font-weight: bold;
+        background-color: #f0f0f0;
+    }
+
+        .faq-question:hover {
+            background-color: #e0e0e0;
+        }
+
+    .faq-answer {
+        padding: 1rem;
+        display: none;
+        border-top: 1px solid #ddd;
+        background-color: #fff;
+    }
+
+    .faq-item.active .faq-answer {
+        display: block;
+    }
+</style>
+<div style="width:100%;">
+
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">Siparişim ne zaman gelir?</div>
+            <div class="faq-answer">
+                Siparişiniz kargoya verildikten sonra bulunduğunuz ile göre 1-3 iş günü içerisinde teslim edilir.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Ürün iadesi nasıl yapılır?</div>
+            <div class="faq-answer">
+                Siparişlerim sayfasından ilgili ürünü seçerek iade talebi oluşturabilirsiniz. Kargo kodu ile ürünü ücretsiz gönderebilirsiniz.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Kuponlarımı nerede görebilirim?</div>
+            <div class="faq-answer">
+                Hesabım → Kuponlarım bölümünden aktif ve geçmiş kuponlarınızı görebilirsiniz.
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+    const faqItems = document.querySelectorAll(".faq-item");
+
+    faqItems.forEach(item => {
+        item.querySelector(".faq-question").addEventListener("click", () => {
+            item.classList.toggle("active");
+        });
+    });
+</script>

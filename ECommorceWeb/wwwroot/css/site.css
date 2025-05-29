@@ -186,6 +186,7 @@ header .header-right-side {
     height: 100%;
     display: flex;
     flex-direction: row;
+    overflow:hidden;
 }
     /* Sol ve Sa� K�s�mlar */
     .login-container .login-left,
@@ -1016,11 +1017,11 @@ header .header-right-side {
     align-items: flex-end;
     overflow: hidden;
     margin: 2rem 2rem 1rem 0;
-    background-size: cover; /* Resmin kutuyu tamamen kaplamasını sağla */
+    background-size: cover; /* Resmin kuuyu tamamen kaplamasını sağla */
     background-position: center; /* Ortalamak için */
 }
 
-    .ml-product-box:hover, .p-product-box:hover .pb-btn {
+    .ml-product-box:hover .pb-btn, .p-product-box:hover .pb-btn {
         transform: translateY(0);
         cursor: pointer;
     }

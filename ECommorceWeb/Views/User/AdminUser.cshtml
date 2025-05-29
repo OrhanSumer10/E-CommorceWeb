@@ -7,7 +7,7 @@
 
 
 <h2>User </h2>
-<table class="table table-bordered" id ="admin-table" style="max-width:90%;">
+<table class="table table-bordered" id="admin-table" style="max-width:90%;">
     <thead>
         <tr>
             <td>ID</td>
@@ -43,9 +43,9 @@
                 else
                 {
                     <td>
-                       
-                            <i class="fa-solid fa-close"></i>
-                       
+
+                        <i class="fa-solid fa-close"></i>
+
                     </td>
                 }
                 <td>@user.IsAdmin</td>
@@ -54,10 +54,10 @@
                 <td> @(user.LastLogin.HasValue ? user.LastLogin.Value.ToString("dd.MM.yyyy") : "Tarih Yok")</td>
                 <td style="display:flex;">
                     <a style="margin-right:.4rem;" class="btn btn-outline-warning" asp-controller="User" asp-action="UpdateUser" asp-route-productId="@user.ApplicationUserId"><i class='bx bx-edit-alt'></i></a>
-                
-                    <form method="post" asp-controller="User" asp-action="DeleteUser" onsubmit="return confirmDelete();">
+
+                    <form method="post" asp-controller="User" asp-action="DeleteUser" >
                         <input type="hidden" name="ApplicationUserId" value="@user.ApplicationUserId" />
-                        <button type="submit" class="btn btn-outline-danger">
+                        <button id="apuserDeleteBtn" type="submit" class="btn btn-outline-danger">
                             <i class='bx bx-x'></i>
                         </button>
                     </form>
@@ -70,7 +70,25 @@
 <a class="btn btn-outline-primary" asp-controller="User" asp-action="AddUser"> <i class='bx bx-add-to-queue'></i>ADD USER</a>
 
 <script>
-    function confirmDelete() {
-        return confirm('Bu ürünü silmek istediğinize emin misiniz?'); // Kullanıcıdan onay al
-    }
+
+    document.querySelectorAll("#apuserDeleteBtn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            const form = this.closest('form');
+
+            confirmDialog(
+                "Bu Kullanıcıyı Silmek Üzeresiniz!!",
+                "Bu işlem geri alınamaz. Devam etmek istiyor musnuz?",
+                function () {
+                    form.submit();
+                    showToastAndSave('Silme işlemi başarılı.', 'success');
+                },
+                function () {
+                    showToastAndSave('Silme işlemi iptal edildi.', 'error');
+                }
+            );
+
+        });
+    });
+
 </script>

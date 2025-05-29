@@ -81,10 +81,10 @@ else
             "Bu işlem geri alınamaz. Kupon kullandıysanız etkilenebilir. Devam etmek istiyor musunuz?",
             function () {
                 form.submit(); // Onay verildiyse formu gönder
-                
+                showToastAndSave('Silme işlemi başarılı', 'success');
             },
             function () {
-                console.log("Silme işlemi iptal edildi.");
+                showToastAndSave('Silme işlemi iptal edildi.', 'erorr');
             }
         );
     });

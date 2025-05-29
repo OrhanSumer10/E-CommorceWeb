@@ -28,6 +28,7 @@ namespace ECommorceWeb.Controllers
         private readonly IGenericDal<CouponUser> _cuService; // Ürün hizmetlerini yöneten servis
 
 
+
         public CartController(IGenericDal<ProductOption> potService, IGenericDal<Coupon> cService, IGenericDal<CouponUser> cuService, IGenericDal<ApUser> userService, IGenericDal<CartItem> cartService, IGenericDal<Product> productService, IGenericDal<ProductImages> productImgService)
         {
             // Constructor içinde bağımlılıkları enjekte et
@@ -82,11 +83,7 @@ namespace ECommorceWeb.Controllers
         [HttpPost]
         public IActionResult AddToCart(int productId, int userCouponId, string selectedValue, decimal selectedPrice, int selectedQuantity)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
+
 
             var pot = _potService.Get(x => x.ProductId == productId && x.OptionValue == selectedValue);
             if (pot != null)
@@ -98,10 +95,20 @@ namespace ECommorceWeb.Controllers
             var product = _productService.Get(x => x.ProductId == productId);
             if (product == null)
             {
-                TempData["ErrorMessage"] = "Ürün bulunamadı.";
+                TempData["alert"] = "Ürün Bulunamadı.";
+                TempData["alertType"] = "invalid";
                 return RedirectToAction("Index", "Product");
+
             }
 
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var existingCartItem = _cartService.Get(x => x.ApplicationUserId == Convert.ToInt32(userId) && x.SelectedValue == selectedValue && x.SelectedPrice == selectedPrice && x.isPaid == false);
 
             if (existingCartItem == null)
@@ -113,18 +120,25 @@ namespace ECommorceWeb.Controllers
                     SelectedValue = selectedValue,
                     SelectedPrice = selectedPrice,
                     SelectedQuantity = selectedQuantity,
+                    OrderId = 0,
                     isPaid = false,
                     AddedDate = DateTime.Now,
                 };
 
-                _cartService.Add(newCartItem);
-                TempData["Message"] = "Ürün sepete eklendi.";
+                
+                    _cartService.Add(newCartItem);
+                    TempData["alert"] = "Başarıyla Sepete Eklendi.";
+                    TempData["alertType"] = "success";
+               
+               
+
             }
             else
             {
                 existingCartItem.SelectedQuantity += selectedQuantity;
                 _cartService.Update(existingCartItem);
-                TempData["Message"] = "Ürün sepetteki miktarı artırıldı.";
+                TempData["alert"] = "Ürün sepetteki miktarı artırıldı.";
+                TempData["alertType"] = "success";
             }
             // Mevcut veriyi çek
             var userCoupon = _cuService.Get(x => x.CouponId == userCouponId);

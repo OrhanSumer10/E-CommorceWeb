@@ -24,7 +24,7 @@ namespace ECommorceWeb.Controllers
         public IActionResult Index()
         {
             GetCategory();
-            var result = _subcategoriesService.GetList().ToList();
+            var result = _subcategoriesService.GetList().OrderByDescending(p=>p.SubCategoryId).ToList();
             List<SubCategories> subcategories = result;
 
             Dictionary<int, string> categoryNames = new Dictionary<int, string>();

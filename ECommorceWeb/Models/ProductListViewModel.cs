@@ -52,6 +52,11 @@ namespace ECommorceWeb.Models
 
         public List<WishlistItem> wishlistItems { get; set; }
         public List<ApUser> ApplicationUsers { get; set; }
+        public List<Product> Last3MenProduct { get; set; }
+        public List<Product> Last3WomenProduct { get; set; }
+        public List<Product> Last3KidProduct { get; set; }
+
+
 
 
         public class ImageViewModel

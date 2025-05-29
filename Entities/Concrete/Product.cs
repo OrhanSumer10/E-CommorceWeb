@@ -53,6 +53,9 @@ namespace Entities.Concrete
         // İlgili ürün detayları
         public ICollection<ProductImages> ProductImages { get; set; } // Sipariş Fotoğrafları
         public ICollection<ProductReview> Reviews { get; set; } // Ürün incelemeleri
+        public ICollection<ProductOption> Options { get; set; } // Ürün incelemeleri
+        public ICollection<CartItem> cartItems { get; set; } // Ürün incelemeleri
+
 
         public ICollection<CouponProduct> CouponProducts { get; set; }
 
@@ -60,6 +63,8 @@ namespace Entities.Concrete
         {
             Reviews = new HashSet<ProductReview>();
             ProductImages = new HashSet<ProductImages>();
+            Options = new HashSet<ProductOption>();
+            cartItems = new HashSet<CartItem>();
         }
     }
 }

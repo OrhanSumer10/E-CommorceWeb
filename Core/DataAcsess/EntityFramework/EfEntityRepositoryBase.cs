@@ -66,6 +66,22 @@ namespace Core.DataAcsess.EntityFramework
             }
         }
 
+        public TEntity GetWithIncludes(Expression<Func<TEntity, bool>> filter, params Expression<Func<TEntity, object>>[] includes)
+        {
+            using (var context = new TContext()) // Yeni bir DbContext örneği oluşturuluyor ve bu örnek using bloğu içinde yönetiliyor. Using bloğu, iş tamamlandığında kaynakların serbest bırakılmasını sağlar.
+            {
+                IQueryable<TEntity> query = context.Set<TEntity>();
+
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+
+                return query.FirstOrDefault(filter);
+            }
+            
+        }
+
         public void Update(TEntity entity)
         {
             using (var context = new TContext())

@@ -13,7 +13,7 @@ namespace ECommorceWeb.Controllers
         IGenericDal<CreditCard> _dal;
         public CreditCardController(IGenericDal<CreditCard> dal)
         {
-                _dal = dal;
+            _dal = dal;
         }
 
         public IActionResult Index()
@@ -27,16 +27,16 @@ namespace ECommorceWeb.Controllers
         {
             // Oturum açmış olan kullanıcının ID'sini alıyoruz
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            var model = new CreditCard 
-            { 
-             cartNumber = creditCard.cartNumber,
-             cvv = creditCard.cvv,
-             month = creditCard.month,
-             year = creditCard.year,
-             userId = Convert.ToInt32(userId),
-            IsDefaultCard = creditCard.IsDefaultCard,
+            var model = new CreditCard
+            {
+                cartNumber = creditCard.cartNumber,
+                cvv = creditCard.cvv,
+                month = creditCard.month,
+                year = creditCard.year,
+                userId = Convert.ToInt32(userId),
+                IsDefaultCard = true,
             };
-                
+
             _dal.Add(model);
             try
             {
@@ -54,9 +54,9 @@ namespace ECommorceWeb.Controllers
 
 
 
-        public IActionResult DeleteCard(int id) 
+        public IActionResult DeleteCard(int id)
         {
-            var card = _dal.Get(x=>x.Id == id);
+            var card = _dal.Get(x => x.Id == id);
 
             _dal.Delete(card);
             try

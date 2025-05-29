@@ -54,8 +54,8 @@ namespace ECommorceWeb.Controllers
                 State = address.State,
                 Neighbourhood = address.Neighbourhood,
                 Street = address.Street,
-                IsDefaultBilling = false,
-                IsDefaultShipping = false
+                IsDefaultBilling = true,
+                IsDefaultShipping = true
             };
 
             _addressService.Add(model);

@@ -5,8 +5,8 @@
 }
 
 
-<div class="profile-container">
-    <div class="profile-container-left">
+<div class="profile-container" style="height:100vh; width:100%;">
+    <div class="profile-container-left" >
         <div class="box profile-name">
             @if (@Model.AUser.Name == null && @Model.AUser.LastName == null)
             {
@@ -40,11 +40,11 @@
             <a id="aid" onclick="degiskeniDegistir('Kullanıcı Bilgilerim')" href="" class="profile-active"><i class="fa-regular fa-user"></i>Kullanıcı Bilgilerim</a>
             <a id="aid" onclick="degiskeniDegistir('Adres Bilgilerim')" href="" class=""><i class="fa-solid fa-map-location-dot"></i>Adres Bilgilerim</a>
             <a id="aid" onclick="degiskeniDegistir('Kart Bilgilerim')" href="" class=""><i class="fa-regular fa-credit-card"></i>Kayıtlı Kartlarım</a>
-            <a id="aid" onclick="degiskeniDegistir('HelpCenter')" href="" class=""><i class="fa-regular fa-circle-question"></i>Yardım</a>
+            <a id="aid" onclick="degiskeniDegistir('Yardım')" href="" class=""><i class="fa-regular fa-circle-question"></i>Yardım</a>
 
         </div>
     </div>
-    <div class="profile-container-right" style="display:block;">
+    <div class="profile-container-right" style="display:block; height:100vh;">
         <div class="box  profile-info">
             <span id="getTopInfo"></span>
         </div>
@@ -75,6 +75,8 @@
             </div>
             <div id="İndirim Kuponlarım" class="get-component" style="display:none;">
                 @await Component.InvokeAsync("MyCoupon")
+            </div>   <div id="Yardım" class="get-component" style="display:none;">
+                @await Component.InvokeAsync("Help")
             </div>
         </div>
     </div>

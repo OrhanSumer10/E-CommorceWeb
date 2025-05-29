@@ -3,6 +3,7 @@ using System;
 using DataAcsess.Concrete.EntityFramework.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAcsess.Migrations
 {
     [DbContext(typeof(MySQLContext))]
-    partial class MySQLContextModelSnapshot : ModelSnapshot
+    [Migration("20250528151410_newCast")]
+    partial class newCast
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,7 +159,6 @@ namespace DataAcsess.Migrations
             modelBuilder.Entity("Entities.Concrete.CartItem", b =>
                 {
                     b.Property<int>("CartItemId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("AddedDate")
@@ -171,9 +172,6 @@ namespace DataAcsess.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductId1")
                         .HasColumnType("int");
 
                     b.Property<decimal>("SelectedPrice")
@@ -193,11 +191,7 @@ namespace DataAcsess.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("OrderId");
-
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("CartItems");
                 });
@@ -626,7 +620,7 @@ namespace DataAcsess.Migrations
 
                     b.HasOne("Entities.Concrete.Order", "Order")
                         .WithMany("CartItems")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("CartItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -635,10 +629,6 @@ namespace DataAcsess.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Entities.Concrete.Product", null)
-                        .WithMany("cartItems")
-                        .HasForeignKey("ProductId1");
 
                     b.Navigation("ApplicationUser");
 
@@ -871,8 +861,6 @@ namespace DataAcsess.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("Reviews");
-
-                    b.Navigation("cartItems");
                 });
 
             modelBuilder.Entity("Entities.Concrete.SubCategories", b =>

@@ -15,7 +15,7 @@ namespace Entities.Concrete
         public string Name { get; set; } // Kategori adı
         public string Description { get; set; } // Kategori açıklaması
 
-        public IEnumerable<BrandCategories> BrandCategories { get; set; } = Enumerable.Empty<BrandCategories>();
+        public List<SubCategories> SubCategories { get; set; }
         public List<Product> Products { get; set; } = new List<Product>();
     }
 }

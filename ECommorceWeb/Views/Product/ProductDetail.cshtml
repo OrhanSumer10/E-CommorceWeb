@@ -42,7 +42,7 @@
         }
     </div>
     <div class="pd-right">
-      
+
         <h4>@Model.Product.Name</h4>
         <!-- Yıldızların Razor ile Dinamik Gösterimi -->
         @{
@@ -129,7 +129,7 @@
 
             <div id="userCode">
                 <input type="text" class="form-control" placeholder="Kodunu Gir...." value="@ViewBag.DiscountForCode" readonly />  <br>
-                <button type="submit" id="useCodeBtn" onclick="showToastAndSave('Kod Başarılı Bir Şekilde Kullanıldı','succes')" data-userdiscount="@userDiscountPercent"
+                <button type="submit" id="useCodeBtn" onclick="showToastAndSave('Kod Başarılı Bir Şekilde Kullanıldı','success')" data-userdiscount="@userDiscountPercent"
                         data-baseprice="@priceAfterProductDiscount" class="btn btn-dark">
                     Kodu Kullan
                 </button>
@@ -139,9 +139,20 @@
 
         }
 
+
         <div class="total">
 
+            @{
 
+                var alert = TempData["alert"];
+                var alertType = TempData["alertType"];
+                if (!User.Identity.IsAuthenticated)
+                {
+                    alert = "Lütfen giriş yapınız.";
+                    alertType = "invalid";
+                }
+
+            }
 
             <h4 id="totalPrice">Toplam: @priceAfterProductDiscount.ToString("F2") ₺</h4>
             <form method="post" asp-action="AddToCart" asp-controller="Cart" asp-route-productId="@Model.Product.ProductId">
@@ -152,7 +163,10 @@
                 <input type="hidden" id="SelectedQuantity" name="SelectedQuantity" value="" />
 
 
-                <button id="addToCart" onclick="showToastAndSave('Başarıyla Sepete Eklendi','success')" class="btn btn-outline-dark" type="submit"> Add To Cart <i class="bx bx-shopping-bag"></i></button>
+                <button id="addToCart"
+                        class="btn btn-outline-dark" type="submit">
+                    Add To Cart <i class="bx bx-shopping-bag"></i>
+                </button>
             </form>
         </div>
         <br />
@@ -163,7 +177,6 @@
 <div style=" width:50%; justify-content:center;">
     @await Component.InvokeAsync("Review", new { productId = Model.Product.ProductId })
 </div>
-
 
 <script>
 
@@ -196,7 +209,7 @@
                     productPrice = newPrice;
                     hiddenPriceInput.value = newPrice.toFixed(2);
                 } else {
-                    alert("İndirim uygulanamadı.");
+                    showToastAndSave('İndirim Uygulanmadı.', 'invalid');
                 }
                 userCodeDiv.hidden = true;
             });
@@ -243,14 +256,13 @@
             let selectedOption = document.querySelector(".checkbox-input:checked");
             if (!selectedOption) {
                 event.preventDefault();
-                alert("Lütfen bir seçenek seçin!");
+                showToastAndSave('Lütfen bir seçenek seçiniz.', 'invalid');
                 return;
             }
-
+            showToastAndSave('Ürün başarılı bir şekilde sepete eklendi', 'success');
             document.getElementById("SelectedValue").value = selectedOption.value;
             document.getElementById("SelectedPrice").value = (parseFloat(selectedOption.dataset.additionalprice) || 0) + parseFloat(productPrice) * inputField.value;
             document.getElementById("SelectedQuantity").value = inputField.value;
-
         });
 
         function updateStockAndPrice() {

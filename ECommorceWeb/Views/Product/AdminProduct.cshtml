@@ -71,7 +71,7 @@
                                 @for (int i = 0; i < Model.ProductImages[product.ProductId].Count; i++)
                                 {
                                     var img = Model.ProductImages[product.ProductId][i];
-                                    <div class="carousel-item @(i == 0 ? "active" : "") d-flex justify-content-center align-items-center" >
+                                    <div class="carousel-item @(i == 0 ? "active" : "") d-flex justify-content-center align-items-center">
                                         <img src="@img.ImageBase64" alt="Product Image" style="max-width: 50px; max-height: 50px; object-fit: cover; border-radius: 8px;" />
 
                                     </div>
@@ -119,9 +119,9 @@
 
                     <a style="margin:0 .5rem 0 .5rem;" class="btn btn-outline-warning" asp-controller="Product" asp-action="UpdateProduct" asp-route-productId="@product.ProductId"><i class='bx bx-edit-alt'></i></a>
 
-                    <form method="post" asp-controller="Product" asp-action="DeleteProduct" onsubmit="return confirmDelete();">
+                    <form method="post" asp-controller="Product" asp-action="DeleteProduct">
                         <input type="hidden" name="productId" value="@product.ProductId" />
-                        <button type="submit" class="btn btn-outline-danger">
+                        <button id="deleteProductBtn" class="btn btn-outline-danger">
                             <i class='bx bx-x'></i>
                         </button>
                     </form>
@@ -134,7 +134,24 @@
 <a class="btn btn-outline-primary" asp-controller="Product" asp-action="AddProduct"> <i class='bx bx-add-to-queue'></i>ADD PRODUCT</a>
 
 <script>
-    function confirmDelete() {
-        return confirm('Bu ürünü silmek istediğinize emin misiniz?'); // Kullanıcıdan onay al
-    }
+    document.querySelectorAll("#deleteProductBtn").forEach(fucntion(btn)){
+
+        bnt.addEventListener("click", function (e) {
+            e.preventDefault(); // Sayfanın reload olmasını engelle
+
+            const form = this.closest("form"); // En yakın formu bul
+
+            confirmDialog(
+                "Bu Ürünü Silmek Üzeresiniz",
+                "Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
+                function () {
+                    form.submit(); // Onay verildiyse formu gönder
+                    showToastAndSave('Silme İşlemi Başarılı.', 'success')
+                },
+                function () {
+                    showToastAndSave('Silme İşlemi İptal Edildi.', 'error')
+                }
+            );
+        });
+    });
 </script>

@@ -1,47 +1,121 @@
-﻿@{
+﻿@model ProductListViewModel
+@{
     Layout = "_AdminLayout";
 }
-
-
 
 <div class="acr-bottom-top">
     <div class="ad-box">
         <div class="ad-box-left"><i class='bx bxs-component'></i></div>
         <div class="ad-box-right">
             <span>Products</span>
-            <h6>2,900</h6>
+            <h6>@Model.Products.Count</h6>
         </div>
     </div>
     <div class="ad-box">
         <div class="ad-box-left"><i class='bx bxs-user-detail'></i></div>
         <div class="ad-box-right">
             <span>Users</span>
-            <h6>350</h6>
+            <h6>@Model.ApplicationUsers.Count</h6>
         </div>
     </div>
     <div class="ad-box">
         <div class="ad-box-left"><i class='bx bxs-shopping-bags'></i></div>
         <div class="ad-box-right">
             <span>Orders</span>
-            <h6>2,900</h6>
+            <h6>@Model.orders.Count</h6>
         </div>
     </div>
     <div class="ad-box">
         <div class="ad-box-left"><i class='bx bx-shopping-bag'></i></div>
         <div class="ad-box-right">
             <span>Total Sales</span>
-            <h6>142</h6>
+            <h6>@ViewBag.TotalSales ₺</h6>
         </div>
     </div>
 </div>
-<div class="acr-bottom-bottom">
-    <div class="acr-bottom-left">
-        
+
+<div class="acr-bottom-bottom row mt-4">
+    <!-- Sol taraf: Grafik veya istatistik -->
+    <div class="acr-bottom-left col-md-8">
+        <h5 style="margin:2rem;">Son 7 Günlük Sipariş Sayısı</h5>
+        <canvas style="margin:2rem;" id="orderChart"></canvas>
     </div>
-    <div class="acr-bottom-right">
-        <div class="acr-bottom-top">
-        </div>
-        <div class="acr-bottom-bottom">
-        </div>
+
+    <!-- Sağ taraf: Son siparişler -->
+    <div class="acr-bottom-right col-md-4">
+        <h5 style="margin:1rem 0 1rem .3rem;"> <i class="fa-solid fa-comments"></i>  Son 5 Yorum</h5>
+        <ul class="list-group">
+
+
+
+            @foreach (var order in Model.reviews.OrderByDescending(p => p.ReviewDate).Take(5).ToList())
+            {
+                double rating = order.Rating; // Örn: 3.5
+
+                string review = order.ReviewText;
+                int lengthToShow = 15;
+                string shortReview = review.Length > lengthToShow
+                ? review.Substring(0, lengthToShow) + "..."
+                : review;
+
+                var user = Model.ApplicationUsers.FirstOrDefault(x => x.ApplicationUserId == order.UserId);
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <small style="font-weight:bold;">@($"{user?.Name} {user?.LastName}")</small><br />
+                        <small style="font-size:.6rem;">@order.ReviewDate.ToString("dd.MMMM.yyyy")</small>
+                    </div>
+                    <div>
+                        <small style="font-size:.8rem;">@shortReview</small><br />
+                        <small>
+                            <ul class="rating-stars d-flex list-unstyled p-0 m-0">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= Math.Floor(rating))
+                                    {
+                                        <li><i class="bx bxs-star" style="color: gold;"></i></li> <!-- Dolu yıldız -->
+                                    }
+                                    else if (i - rating <= 0.5)
+                                    {
+                                        <li><i class="bx bxs-star-half" style="color: gold;"></i></li> <!-- Yarım yıldız -->
+                                    }
+                                    else
+                                    {
+                                        <li><i class="bx bx-star" style="color: gold;"></i></li> <!-- Boş yıldız -->
+                                    }
+                                }
+                            </ul>
+                        </small>
+                    </div>
+                </li>
+                <br />
+            }
+        </ul>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('orderChart').getContext('2d');
+        var orderChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.Last7DaysLabels)), // örn: ["Pzt", "Salı", "Çar", ...]
+                datasets: [{
+                    label: 'Sipariş Sayısı',
+                    data: @Html.Raw(Json.Serialize(ViewBag.Last7DaysCounts)), // örn: [5, 8, 6, 7, 2, 3, 4]
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}

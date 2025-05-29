@@ -3,6 +3,7 @@ using System;
 using DataAcsess.Concrete.EntityFramework.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAcsess.Migrations
 {
     [DbContext(typeof(MySQLContext))]
-    partial class MySQLContextModelSnapshot : ModelSnapshot
+    [Migration("20250528153543_newCastt")]
+    partial class newCastt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,9 +175,6 @@ namespace DataAcsess.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("SelectedPrice")
                         .HasColumnType("decimal(65,30)");
 
@@ -196,8 +195,6 @@ namespace DataAcsess.Migrations
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("CartItems");
                 });
@@ -636,10 +633,6 @@ namespace DataAcsess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.Product", null)
-                        .WithMany("cartItems")
-                        .HasForeignKey("ProductId1");
-
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Order");
@@ -871,8 +864,6 @@ namespace DataAcsess.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("Reviews");
-
-                    b.Navigation("cartItems");
                 });
 
             modelBuilder.Entity("Entities.Concrete.SubCategories", b =>

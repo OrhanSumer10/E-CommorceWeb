@@ -21,8 +21,12 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>@ViewData["Title"] - Admin Layout</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -31,14 +35,18 @@
 
 </head>
 <body>
-
+    @{
+        var userName = User.Identity.IsAuthenticated
+        ? User.Identity.Name
+        : "Misafir";
+    }
     <div class="admin-container">
         <div class="admin-container-left">
             <div class="acl-navbar">
                 <div class="acl-navbar-top">
                     <span>
                         <i class='bx bx-user-circle'></i>
-                        Orhan Sümer
+                        @userName
                     </span>
                 </div>
                 <div class="acl-navbar-bottom">
@@ -72,9 +80,6 @@
                             <a id="admin-btn" href="/ProductReview/Index" class="acl-navbar-bottom-btn">  <i class='bx bx-revision'></i> Product Review </a>
                         </li>
                         <li>
-                            <a id="admin-btn" class="acl-navbar-bottom-btn">  <i class='bx bx-cog'></i> Settings </a>
-                        </li>
-                        <li>
                             <a id="admin-btn" href="/Login/Logout" class="acl-navbar-bottom-btn">  <i class='bx bx-log-out'></i> Logout </a>
                         </li>
                     </ul>
@@ -83,14 +88,16 @@
             </div>
         </div>
         <div class="admin-container-right">
-            <div class="acr-top">
-                top
-            </div>
+
             <div class="acr-bottom">
                 @RenderBody()
+
+                <div class="toast" id="toastBox" style="display:none;"></div>
             </div>
         </div>
     </div>
+    <script src="~/js/adminsite.js"></script>
+    <script src="~/js/toast.js"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -112,7 +112,7 @@
                                 }
                             </select>
                         </form>
-                      
+
                     </td>
                     <td>@(item.Payment != null ? item.Payment.ToString() : "Ödeme bilgisi yok")</td> <!-- Ödeme bilgisi -->
                     <td>
@@ -130,14 +130,13 @@
                         }
                     </td>
                     <td>
-                        <button class="btn btn-dark"> <i class="fa-solid fa-edit"></i></button>
                         <form action="/Order/ODelete" method="post" style="display:inline;">
                             <input type="hidden" name="orderId" value="@item.OrderId" />
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Silmek istediğinize emin misiniz?')">
+                            <button id="orderDbtn" type="submit" class="btn btn-danger">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
-                        <a href="@Url.Action("Invoice", "Order", new { orderId = item.OrderId })" target="_blank" class="btn btn-primary">
+                        <a id ="invoiceBtn" href="@Url.Action("Invoice", "Order", new { orderId = item.OrderId })" target="_blank" class="btn btn-primary">
                             <i class="fa-solid fa-receipt"></i>
                         </a>
                     </td>
@@ -147,4 +146,28 @@
     </tbody>
 </table>
 
+<script>
+    document.querySelectorAll("#orderDbtn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault(); // Sayfanın reload olmasını engelle
 
+            const form = this.closest("form"); // En yakın formu bul
+
+            confirmDialog(
+                "Bu Orderi Silmek Üzeresiniz",
+                "Bu işlem geri alınamaz. Devam etmek istiyor musunuz?",
+                function () {
+                    form.submit(); // Onay verildiyse formu gönder
+                    showToastAndSave('Order Silme İşlemi Başarılı.', 'success')
+                },
+                function () {
+                    showToastAndSave('Silme İşlemi İptal Edildi.', 'error')
+                }
+            );
+        });
+    });
+
+    document.getElementById("invoiceBtn").addEventListener("click",function(){
+        showToastAndSave('Fatura Oluşturuldu.', 'success')
+    });
+</script>

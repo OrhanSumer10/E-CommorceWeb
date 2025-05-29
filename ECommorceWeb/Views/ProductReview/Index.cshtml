@@ -16,13 +16,13 @@
             <th scope="col">User Name </th>
             <th scope="col">Rating</th>
             <th scope="col">Review Text</th>
-            <th scope="col">OPTION</th>
+            <th scope="col">Detail</th>
         </tr>
     </thead>
     <tbody>
-        
-           
-        
+
+
+
         @foreach (var item in Model.reviews)
         {
             var user = Model.apUsers.FirstOrDefault(x => x.ApplicationUserId == item.UserId);
@@ -58,8 +58,7 @@
                 </td>
                 <td>@item.ReviewText</td>
                 <td>
-                    <button class="btn btn-dark"> <i class="fa-solid fa-edit"></i></button>
-                    <button class="btn btn-danger"><i class="fa-solid fa-trash"></i> </button>
+                    <a asp-action="ProductDetail" asp-controller="Product" asp-route-productId="@item.ProductId" class="btn btn-primary"><i class="fa-solid fa-eye"></i> Gözat </a>
                 </td>
             </tr>
         }

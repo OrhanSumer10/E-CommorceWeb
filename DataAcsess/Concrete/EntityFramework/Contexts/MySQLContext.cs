@@ -1,4 +1,5 @@
 ﻿using Entities.Concrete;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -59,6 +60,46 @@ namespace DataAcsess.Concrete.EntityFramework.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
+            modelBuilder.Entity<ProductOption>()
+                            .HasOne(o => o.Product)
+                            .WithMany(p => p.Options)
+                            .HasForeignKey(o => o.ProductId)
+                            .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ProductReview>()
+                            .HasOne(o => o.Product)
+                            .WithMany(p => p.Reviews)
+                            .HasForeignKey(o => o.ProductId)
+                            .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ProductImages>()
+                            .HasOne(p => p.product)
+                            .WithMany(o => o.ProductImages)
+                            .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CartItem>()
+                                 .HasOne(o => o.Product)
+                                 .WithMany(p => p.cartItems)
+                                 .HasForeignKey(o => o.ProductId)
+                                 .OnDelete(DeleteBehavior.Cascade);
+
+
+
+            modelBuilder.Entity<CartItem>()
+                                    .HasOne(o => o.Order)
+                                    .WithMany(p => p.CartItems)
+                                    .HasForeignKey(o => o.OrderId)
+                                    .OnDelete(DeleteBehavior.Cascade);
+
+
+
+            modelBuilder.Entity<SubCategories>()
+                .HasOne(c => c.Category)
+                .WithMany(p => p.SubCategories)
+                .HasForeignKey(f => f.ParentCategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<CartItem>()
         .HasKey(c => c.CartItemId);
@@ -112,10 +153,7 @@ namespace DataAcsess.Concrete.EntityFramework.Contexts
                 .WithMany(b => b.BrandCategories)
                 .HasForeignKey(bc => bc.BrandId);
 
-            modelBuilder.Entity<BrandCategories>()
-                .HasOne(bc => bc.Category)
-                .WithMany(c => c.BrandCategories)
-                .HasForeignKey(bc => bc.CategoryId);
+
 
 
             modelBuilder.Entity<ProductReview>()
@@ -149,7 +187,7 @@ namespace DataAcsess.Concrete.EntityFramework.Contexts
                 .HasOne(w => w.Product)  // Her WishlistItem bir Product'a sahiptir
                 .WithMany()  // Product modelinde WishlistItems koleksiyonu olmayabilir
                 .HasForeignKey(w => w.ProductId)  // WishlistItem'daki ProductId, Product tablosundaki ID'ye karşılık gelir
-                .OnDelete(DeleteBehavior.Restrict);  // Product silindiğinde, WishlistItem'lar etkilenmez
+                .OnDelete(DeleteBehavior.Cascade);  // Product silindiğinde, WishlistItem'lar etkilenmez
 
             // CartItem ile ApplicationUser ilişkisini yapılandırır
             modelBuilder.Entity<CartItem>()
@@ -162,7 +200,7 @@ namespace DataAcsess.Concrete.EntityFramework.Contexts
                 .HasOne(c => c.Product)  // Her CartItem bir Product'a sahiptir
                 .WithMany()  // Product modelinde CartItems koleksiyonu olmayabilir
                 .HasForeignKey(c => c.ProductId)  // CartItem'daki ProductId, Product tablosundaki ID'ye karşılık gelir
-                .OnDelete(DeleteBehavior.Restrict);  // Product silindiğinde, CartItem'lar etkilenmez
+                .OnDelete(DeleteBehavior.Cascade);  // Product silindiğinde, CartItem'lar etkilenmez
 
 
 

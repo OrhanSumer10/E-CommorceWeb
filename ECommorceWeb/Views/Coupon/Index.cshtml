@@ -24,7 +24,7 @@
                 <td>@not.Discount.ToString("F0")</td>
                 <td>
                     <form method="post" asp-controller="Coupon" asp-action="deleteCoupon" asp-route-CouponId="@not.CouponId">
-                        <button class="btn btn-danger">
+                        <button id="couponDB" class="btn btn-danger">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </form>
@@ -36,3 +36,21 @@
 
 <a class="btn btn-outline-dark" asp-controller="Coupon" asp-action="addCoupon"> <i class='bx bx-add-to-queue'></i>ADD COUPON</a>
 
+<script>
+    document.getElementById("couponDB").addEventListener("click", function (e) {
+
+        e.preventDefault();
+        const form = this.closest('form');
+        confirmDialog(
+            'Bu Couponu Silmek Üzersiniz.',
+            'Bu işlem geri alınamaz. Devam Etmek İstiyor Musunuz ?',
+            function () {
+                form.submit();
+                showToastAndSave('Silme İşlemi Başarılı', 'success');
+            },
+            function () {
+                showToastAndSave('Silme İşlemi İptal Edildi.', 'error');
+            }
+        );
+    });
+</script>

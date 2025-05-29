@@ -27,13 +27,13 @@ namespace ECommorceWeb.Controllers
             _adresdal = adresdal;
             _pidal = pidal;
             _productDal = productDal;
-      
+
         }
 
         public IActionResult Index()
         {
             // Siparişleri al (UserId'ye göre)
-            var orderlist = _orderdal.GetList().Where(x => x.UserId != null).ToList(); // UserId'ye göre siparişler
+            var orderlist = _orderdal.GetList().Where(x => x.UserId != null).OrderByDescending(p => p.OrderId).ToList(); // UserId'ye göre siparişler
 
             // Kullanıcıları al
             var userIds = orderlist.Select(o => o.UserId).Distinct().ToList(); // Siparişlerden benzersiz UserId'leri al
@@ -163,11 +163,13 @@ namespace ECommorceWeb.Controllers
 
 
         [HttpPost]
-        public IActionResult ODelete(int orderId) 
+        public IActionResult ODelete(int orderId)
         {
             try
             {
-                var order = _orderdal.Get(x => x.OrderId == orderId);
+                var order = _orderdal.GetWithIncludes(x => x.OrderId == orderId,
+              c => c.CartItems
+          );
                 _orderdal.Delete(order);
                 return RedirectToAction("Index", "Order");
 

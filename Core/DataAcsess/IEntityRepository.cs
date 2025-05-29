@@ -32,6 +32,9 @@ new(): T türünün bir parametresiz yapıcıya (constructor) sahip olması gere
 Expression<Func<T, bool>> filter = null: Bu, isteğe bağlı bir filtre ifadesidir. Eğer filter belirtilmemişse (null), tüm varlıklar döndürülür.
 Yöntem, belirtilen filtreye uyan varlıkların bir listesini döndürür.
          */
+
+        T GetWithIncludes(Expression<Func<T, bool>> filter, params Expression<Func<T, object>>[] includes);
+
         void Add(T entity);
         void Update(T entity);
         void Delete(T entity);

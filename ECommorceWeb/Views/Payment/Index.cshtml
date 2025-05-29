@@ -173,7 +173,10 @@ justify-content:space-between;
             <br />
             <form method="post" id="orderForm" asp-action="addOrder" asp-controller="Payment">
                 <input type="hidden" name="userId" value="@Model.apUser.ApplicationUserId" />
-                <input type="hidden" name="cartItem" value="@Model.cartItem" />
+                @foreach (var item in Model.cartItems)
+                {
+                    <input type="hidden" name="CartItemId" value="@item.CartItemId" />
+                }
                 <input type="hidden" name="isPaid" value="true" />
                 <button id="addOrderBtn" type="submit" class="btn btn-primary"> <i class="fa-solid fa-money-check-dollar"></i> Ödemeyi Tamamla </button>
             </form>

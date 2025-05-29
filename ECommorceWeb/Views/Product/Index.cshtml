@@ -3,101 +3,31 @@
 @{
     Layout = "_Layout";
 }
-<div id="toastBox" class="toast" style="display:none;">
-    @TempData["Message"]
+
+
+<div style="width:50%; display:flex; gap:1rem;">
+    <input id="searchInput" class="form form-control" type="search" placeholder="Aramak istediğiniz kelimeyi yazın." />
+
+    <select id="sortSelect" class="form form-control">
+        <option value="">Sırala</option>
+        <option value="name-asc">A'dan Z'ye</option>
+        <option value="name-desc">Z'den A'ya</option>
+        <option value="price-asc">Fiyata Göre (Ucuzdan Pahalıya)</option>
+        <option value="price-desc">Fiyata Göre (Pahalıdan Ucuza)</option>
+    </select>
 </div>
-
-
 <div class="p-content">
-
-    @*
-    @foreach (var product in Model.Products)
-    {
-    <div class="product-box">
-
-    <div class="product-box-top">
-    @if (Model.ProductImages.ContainsKey(product.ProductId) && Model.ProductImages[product.ProductId].Any())
-    {
-    <!-- Benzersiz bir carousel bileşeni tanımlıyoruz. Her ürünün kendi carousel'ine sahip olması için ürünün ID'sini carousel id'sine ekliyoruz -->
-    <div id="carousel-@product.ProductId" class="carousel slide" data-bs-ride="carousel">
-
-    <!-- carousel-inner: İçinde her bir resim için bir "carousel-item" içeren ana kapsayıcı -->
-    <div class="carousel-inner">
-    <!-- for döngüsü: Model.ProductImages[product.ProductId] içindeki her bir resim URL'si için döner -->
-    @for (int i = 0; i < Model.ProductImages[product.ProductId].Count; i++)
-    {
-    var imageUrl = Model.ProductImages[product.ProductId][i];
-    <!-- imageUrl: Bu döngüdeki resim URL'si -->
-    <!-- carousel-item: Slider'daki her bir resim bu yapıda yer alır -->
-    <!-- İlk öğeye "active" sınıfı eklenir, böylece slider açıldığında ilk resim gösterilir -->
-    <div class="carousel-item @(i == 0 ? "active" : "")">
-    <img src="@imageUrl" />
-    </div>
-    }
-    </div>
-    <!-- Sol (Önceki) buton: Bir önceki resme geçiş yapılmasını sağlar -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@product.ProductId" data-bs-slide="prev">
-    <span style="background-color:black;" class="carousel-control-prev-icon" aria-hidden="true"></span> <!-- Görsel simge -->
-    <span style="background-color:black;" class="visually-hidden">Previous</span> <!-- Ekran okuyucular için açıklama -->
-    </button>
-
-    <!-- Sağ (Sonraki) buton: Bir sonraki resme geçiş yapılmasını sağlar -->
-    <button class="carousel-control-next" type="button" data-bs-target="#carousel-@product.ProductId" data-bs-slide="next">
-    <span style="background-color:black;" class="carousel-control-next-icon" aria-hidden="true"></span> <!-- Görsel simge -->
-    <span style="background-color:black;" class="visually-hidden">Next</span> <!-- Ekran okuyucular için açıklama -->
-    </button>
-    </div>
-    }
-    </div>
-    <div class="product-box-middle">
-    <span class="rating" id="rating-stars-@product.ProductId">
-    <!-- Yıldızlar burada JavaScript ile doldurulacak -->
-    </span>
-    <span class="bold-text">₺ @product.Price </span>
-    </div>
-    <div class="product-box-bottom">
-    <div class="product-info">
-    <span class="bold-text">@product.Name </span>
-    <small>@(product.Description.Length > 30 ? product.Description.Substring(0, 30) + "..." : product.Description)</small>
-
-
-    </div>
-    <div class="product-sale">
-
-    <form method="post" action="@Url.Action("AddToWL", "WishListItem")">
-    <input type="hidden" name="ProductId" value="@product.ProductId" />
-    <button id="btn-@product.ProductId" type="submit" class="btn-addToWL">
-    <i class='bx bx-heart'></i>
-    </button>
-    </form>
-    <form method="post" action="@Url.Action("AddToCart", "Cart")">
-    <input type="hidden" name="ProductId" value="@product.ProductId" />
-    <button id="btn-@product.ProductId" type="submit" class="btn-addToWL">
-    <i class='bx bx-shopping-bag'></i>
-    </button>
-    </form>
-    <form action="@Url.Action("ProductDetail", "Product")">
-    <input type="hidden" name="ProductId" value="@product.ProductId" />
-    <button id="btn-@product.ProductId" type="submit" class="btn-addToCart">
-    <i class='bx bx-detail'></i> Detail
-    </button>
-    </form>
-    </div>
-
-    </div>
-    </div>
-    } *@
     @{
         List<CouponProduct> couponProducts = Model.couponProducts != null
+
         ? Model.couponProducts
         : new List<CouponProduct>();
-
         List<Coupon> coupons = Model.coupons != null
         ? Model.coupons
         : new List<Coupon>();
     }
 
-    
+
     @foreach (var product in Model.Products)
     {
         var matchingCouponProduct = couponProducts.FirstOrDefault(cp => cp.ProductId == product.ProductId);
@@ -111,8 +41,8 @@
         }
 
         @* İndirim etiketi *@
-       
-        <div class="ml-product">
+
+        <div class="ml-product" data-name="@product.Name.ToLower()" data-price="@product.Price">
             <div class="p-product-box" style="background-image:url('@imgurl'); width:15rem; height:15rem;">
 
                 @* İndirim etiketi *@
@@ -122,7 +52,7 @@
                         %@matchedCoupon.Discount.ToString("F0") İndirim
                     </div>
                 }
-                
+
                 <form action="@Url.Action("ProductDetail", "Product")">
                     <input type="hidden" name="ProductId" value="@product.ProductId" />
                     <button class="pb-btn" type="submit" style="border:none;width:3rem; height:3rem;">
@@ -135,9 +65,9 @@
                         <i class="fa-regular fa-heart"></i>
                     </button>
                 </form>
-              
+
             </div>
-         
+
             <h4 style="font-weight:700;">@product.Name</h4>
             <h6 class="text-muted">@product.Price ₺</h6>
         </div>
@@ -145,3 +75,40 @@
 
 </div>
 
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
+    const productItems = document.querySelectorAll(".ml-product");
+
+    function filterAndSort() {
+        const searchValue = searchInput.value.toLowerCase();
+        const sortValue = sortSelect.value;
+
+        const products = Array.from(productItems);
+
+        // 1. Arama filtresi
+        let filtered = products.filter(p => {
+            const name = p.dataset.name;
+            return name.includes(searchValue);
+        });
+
+        // 2. Sıralama
+        if (sortValue === "name-asc") {
+            filtered.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+        } else if (sortValue === "name-desc") {
+            filtered.sort((a, b) => b.dataset.name.localeCompare(a.dataset.name));
+        } else if (sortValue === "price-asc") {
+            filtered.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price));
+        } else if (sortValue === "price-desc") {
+            filtered.sort((a, b) => parseFloat(b.dataset.price) - parseFloat(a.dataset.price));
+        }
+
+        // 3. Ekranı güncelle
+        const container = document.querySelector(".p-content");
+        container.innerHTML = ""; // Önce boşalt
+        filtered.forEach(p => container.appendChild(p)); // Sıralı şekilde tekrar ekle
+    }
+
+    searchInput.addEventListener("input", filterAndSort);
+    sortSelect.addEventListener("change", filterAndSort);
+</script>

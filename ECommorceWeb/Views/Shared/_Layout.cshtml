@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
- 
+
     <header class="header-ecom">
         <div class="header-left-side">
             <i class='bx bx-store-alt'></i>
@@ -42,12 +42,11 @@
                 <li>
                     <a href="/Product/Index">All Product</a>
                 </li>
-                @await Component.InvokeAsync("Menu")
                 <li>
-                    <a asp-controller="" asp-action="">About Us</a>
+                    <a asp-controller="Home" asp-action="AboutUs">About Us</a>
                 </li>
                 <li>
-                    <a asp-controller="" asp-action="">Contact Us</a>
+                    <a asp-controller="Home" asp-action="ContactUs">Contact Us</a>
                 </li>
 
             </ul>
@@ -55,8 +54,12 @@
         <div class="header-right-side">
             <div class="icon-links">
                 <ul>
-                    <li>
-                        <a href="#" title="Search"><i class="bx bx-search"></i></a>
+                    <li class="dropdown">
+                        <a class="dropbtn"> <i class='bx  bx-bell'></i>  </a>
+                        <div class="dropdown-content">
+                                @await Component.InvokeAsync("Notification")
+                      
+                        </div>
                     </li>
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
@@ -140,6 +143,8 @@
 
 
 
+    <!-- Footer -->
+    <!-- End of .container -->
 
     <script src="~/js/site.js"></script>
     <script src="~/js/toast.js"></script>

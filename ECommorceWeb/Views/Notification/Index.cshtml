@@ -43,7 +43,7 @@
 
                     <form method="post" asp-controller="Notification" asp-action="deleteNot" asp-route-NotificationId="@not.NotificationId">
 
-                        <button class="btn btn-danger"><i class="fa-solid fa-trash"></i> </button>
+                        <button id="notDeleteBtn" class="btn btn-danger"><i class="fa-solid fa-trash"></i> </button>
                     </form>
                 </td>
             </tr>
@@ -52,3 +52,25 @@
 
 </table>
 <a class="btn btn-outline-dark" asp-controller="Notification" asp-action="addNot"> <i class='bx bx-add-to-queue'></i>ADD NOTIFCATION</a>
+
+<script>
+    document.querySelectorAll("#notDeleteBtn").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const form = this.closest("form");
+
+            confirmDialog(
+                "Bu Bildirimi Silmek Üzeresiniz",
+                "Bu işlem geri alınamaz. Devam Etmek İstiyor Musunuz ?",
+                function () {
+                    form.submit();
+                    showToastAndSave('Silme İşlemi Başarılı', 'success');
+                },
+                function () {
+                    showToastAndSave('Silme İşlemi İptal Edildi.', 'error');
+                }
+            );
+        });
+    });
+</script>

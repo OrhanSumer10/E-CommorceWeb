@@ -19,7 +19,6 @@ using System.Xml.Linq;
 using System.Linq;
 using ServiceStack;
 using static ECommorceWeb.Models.ProductListViewModel;
-using AspNetCore;
 using System.Runtime.InteropServices;
 
 namespace ECommorceWeb.Controllers
@@ -71,10 +70,10 @@ namespace ECommorceWeb.Controllers
 
                 // 1. Kategori adından eşleşen CategoryId'leri al
                 var matchedCategoryIds = category
-                    .Where(c => !string.IsNullOrEmpty(c.Name) &&
-                                c.Name.Trim().ToLower().Contains(lowerFilter))
-                    .Select(c => c.CategoryId)
-                    .ToList();
+      .Where(c => !string.IsNullOrEmpty(c.Name) &&
+                  c.Name.Trim().ToLower() == lowerFilter)
+      .Select(c => c.CategoryId)
+      .ToList();
 
                 // 2. Product listesini bu CategoryId'lere göre filtrele
                 result = result
@@ -83,8 +82,8 @@ namespace ECommorceWeb.Controllers
 
             }
 
-            var lastMensProducts = GetLast3Product("Mens");
-            ViewBag.mensProducts = lastMensProducts;
+
+
 
             List<Product> products = result;
 
@@ -136,32 +135,7 @@ namespace ECommorceWeb.Controllers
         }
 
 
-        public List<Product> GetLast3Product(string? filter = null)
-        {
-            var allProducts = _productService.GetList().ToList();
-            var allCategories = _categoryService.GetList().ToList();
 
-            int? categoryId = null;
-
-            if (!string.IsNullOrEmpty(filter))
-            {
-                string lowerFilter = filter.Trim().ToLower();
-                categoryId = allCategories
-                                .FirstOrDefault(c => !string.IsNullOrEmpty(c.Name) && c.Name.ToLower().Contains(lowerFilter))
-                                ?.CategoryId;
-            }
-
-            if (categoryId.HasValue)
-            {
-                return allProducts
-                    .Where(p => p.CategoryId == categoryId.Value)
-                    .OrderByDescending(p => p.ProductId) // Son ürünleri al
-                    .Take(3)
-                    .ToList();
-            }
-
-            return new List<Product>(); // boş döndür
-        }
 
 
 
@@ -200,7 +174,7 @@ namespace ECommorceWeb.Controllers
 
             }
 
-            getRating (products);
+            getRating(products);
 
 
             // ViewBag ile tüm ürünlerin toplam stoğunu gönder
@@ -348,17 +322,24 @@ namespace ECommorceWeb.Controllers
         [HttpPost]
         public IActionResult DeleteProduct(int productId)
         {
-            // Ürünü veritabanından al
-            var getProduct = _productService.GetList(x => x.ProductId == productId).SingleOrDefault();
+            
+            // Product ile birlikte ilişkili verileri (Options, Reviews, ProductImages) dahil ederek al
+            var product = _productService.GetWithIncludes(
+                x => x.ProductId == productId,
+                p => p.Options,
+                p => p.Reviews,
+                p => p.ProductImages,
+                c =>c.cartItems
+            );
 
-            if (getProduct == null)
+            if (product == null)
             {
                 TempData["ErrorMessage"] = "Ürün bulunamadı.";
                 return RedirectToAction("AdminProduct", "Product");
             }
 
             // Ürünü silme işlemi
-            _productService.Delete(getProduct);
+            _productService.Delete(product);
 
             try
             {
@@ -497,14 +478,13 @@ namespace ECommorceWeb.Controllers
         {
             try
             {
-                var userIdString = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                if (!int.TryParse(userIdString, out int userId))
-                {
-                    return Unauthorized("Kullanıcı bulunamadı.");
-                }
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+                
                 var cp = _couponproductService.Get(x => x.ProductId == productId && x.isUsed == false);
 
-                List<Product> products = _productService.GetList().ToList() ;
+                List<Product> products = _productService.GetList().ToList();
 
                 getRating(products);
 
@@ -515,7 +495,7 @@ namespace ECommorceWeb.Controllers
                     ViewBag.DiscountF = _couponService.Get(x => x.CouponId == cp.CouponId).Discount;
                     coupon = _couponService.Get(x => x.CouponId == cp.CouponId);
                 }
-                var cu = _couponuserService.Get(x => x.UserId == userId && x.isUsed == false);
+                var cu = _couponuserService.Get(x => x.UserId == Convert.ToInt32(userId) && x.isUsed == false);
 
                 if (cu != null)
                 {
@@ -529,7 +509,7 @@ namespace ECommorceWeb.Controllers
                 // Ürün bilgisini alıyoruz
                 var productResult = _productService.GetList(x => x.ProductId == productId).SingleOrDefault();
 
-             
+
 
                 if (productResult == null)
                 {

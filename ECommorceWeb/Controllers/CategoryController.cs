@@ -21,7 +21,7 @@ namespace ECommorceWeb.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            var result = _categoryService.GetList().ToList();
+            var result = _categoryService.GetList().OrderByDescending(p => p.CategoryId).ToList();
             List<Category> categories = result;
             var model = new ProductListViewModel
             {
@@ -100,17 +100,17 @@ namespace ECommorceWeb.Controllers
         public IActionResult UpdateCategory(Category category)
         {
             _categoryService.Update(category);
-            try 
+            try
             {
                 TempData["Message"] = "Kategori başarıyla Güncellendi.";
                 return RedirectToAction("Index", "Category");
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "Kategori Güncellenemedi.";
                 return BadRequest("Hata :  " + ex.Message);
             }
-         
+
         }
 
     }
