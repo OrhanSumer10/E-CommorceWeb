@@ -31,7 +31,6 @@ namespace DataAcsess.Concrete.EntityFramework.Contexts
 
 
 
-        //static readonly string connectionString = "server=45.84.189.34\\localhost; database=bilgegul_netcorelaw; user=bilgegul_er; password=Gara4ever*";
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
